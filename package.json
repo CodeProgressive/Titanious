@@ -1,0 +1,32 @@
+{
+  "name": "Titanious",
+  "description": "An open source webserver software management tool",
+  "version": "0.0.1",
+  "homepage": "http://codeprogressive.com",
+  "author": {
+    "name": "Jimmy Aupperlee",
+    "email": "j.aup.gt@gmail.com"
+  },
+  "bugs": {
+    "url": "http://codeprogressive.com"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt nodeunit"
+  },
+  "dependencies" : {
+      "express": "~4.0.0",
+      "morgan": "~1.0.0",
+      "body-parser": "~1.0.0",
+      "method-override": "~1.0.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.4"
+  },
+  "keywords": ["titanious", "codeprogressive", "open", "source", "webserver", "management"]
+}
