@@ -1,0 +1,3 @@
+[submodule "node_modules/tadd-mongodb"]
+	path = node_modules/tadd-mongodb
+	url = git@github.com:CodeProgressive/Tadd-MongoDB.git

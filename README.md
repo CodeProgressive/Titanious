@@ -1,13 +1,13 @@
 [![codeProgressive logo](http://codeprogressive.com/application/assets/images/logo_inverse.svg)](http://codeprogressive.com)
 # TITANIOUS [![Build Status](https://secure.travis-ci.org/CodeProgressive/Titanious.png?branch=master)](http://travis-ci.org/CodeProgressive/Titanious)
 
-An open source webserver software management tool
+The open source webserver software management tool. More information can be found here: [http://titanio.us](http://titanio.us).
 
 ## Getting Started
 
 ### Installation
 
-    $ npm install titanious
+    $ npm install titanious -g
 
 ## Documentation
 _(Coming soon)_
