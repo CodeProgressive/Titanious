@@ -28,9 +28,6 @@ var express = require('express'),
  |--------------------------------------------------------------------------
  | The constructor
  |--------------------------------------------------------------------------
- |
- |
- |
  */
 
 var routerClass = function(model, view, controller) {
@@ -41,6 +38,15 @@ var routerClass = function(model, view, controller) {
 
 };
 
+/*
+ |--------------------------------------------------------------------------
+ | Get (acually set) the entire router
+ |--------------------------------------------------------------------------
+ |
+ | This method fetches every router file and processes it for use with
+ | express
+ |
+ */
 routerClass.prototype.getRouter = function(self, callback) {
 
     var routes = require('require-all')(paths.__routes);

@@ -22,7 +22,7 @@
  */
 
 var express         = require('express'),
-    swig            = require('swig'),
+    gaikan          = require('gaikan'),
     cookieParser    = require('cookie-parser'),
     session         = require('express-session'),
     morgan          = require('morgan'),
@@ -84,11 +84,11 @@ var expressClass = function(name, app) {
         this.options.connection.port = parseInt(this.options.connection.port,10);
     }
 
-    // This is where all the template parse magic happens!
-    this.app.engine('html', swig.renderFile);
+    // Set the template engine to gaikan (the fastest there is!)
+    this.app.engine('html', gaikan);
 
     // View engine
-    this.app.set('view engine', 'html');
+    this.app.set('view engine', '.html');
     // The view directory
     this.app.set('views', paths.__views);
 
@@ -102,16 +102,17 @@ var expressClass = function(name, app) {
     this.app.use(cookieParser());
     // use sessions
     this.app.use(session({ secret: this.options.session_secret, key: 'sid', cookie: { secure: true }}));
+    // Our own middleware
+    this.app.use(this.resetRoute(this));
 
-    this.app.use(this.init(this));
+    // Initialize the default objects used
+    this.init();
 
     if(app.options.dev) {
         // log every request to the console
         this.app.use(morgan('dev'));
         // Disable caching by express:
         this.app.set('view cache', false);
-        // Disable swig caching
-        swig.setDefaults({ cache: false });
     }
 
     this.app.listen(this.options.connection.port);
@@ -128,24 +129,38 @@ var expressClass = function(name, app) {
  | within the different routes
  |
  */
-expressClass.prototype.init = function(self) {
+
+expressClass.prototype.init = function() {
+
+    this.model = new modelClass(),
+    this.view = new viewClass(),
+    this.controller = new controllerClass(this.options, this.model, this.view),
+    this.router = new routerClass(this.model, this.view, this.controller);
+
+    this.router.getRouter(this, function(err){
+
+        if(err) {
+            throw new Error(err);
+        }
+    });
+}
+
+/*
+ |--------------------------------------------------------------------------
+ | Reset some basic stuff for every route
+ |--------------------------------------------------------------------------
+ |
+ | This middleware makes sure that everything inside the main regulators
+ | is reset to the default.
+ |
+ */
+expressClass.prototype.resetRoute = function(self) {
 
     return function(req,res,next) {
 
-        var model = new modelClass(),
-            view = new viewClass(res),
-            controller = new controllerClass(self.options, model, view),
-            router = new routerClass(model, view, controller);
-
-        router.getRouter(self, function(err){
-
-            if(err) {
-                throw new Error(err);
-            }
-
-            next();
-        });
-    };
+        self.view.setResponse(res);
+        next();
+    }
 };
 
 // Export the module!

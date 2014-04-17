@@ -31,7 +31,7 @@ userController.prototype.login = function() {
 
     // Make the login view
     return this.view.make("login.html");
-};
+}
 
 // Export the module!
 module.exports = userController;

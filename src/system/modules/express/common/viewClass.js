@@ -30,11 +30,19 @@ var fs      = require('fs'),
  |--------------------------------------------------------------------------
  */
 
-var viewClass = function(response) {
+var viewClass = function() {};
+
+/*
+ |--------------------------------------------------------------------------
+ | Set response
+ |--------------------------------------------------------------------------
+ */
+
+viewClass.prototype.setResponse = function(response) {
 
     // Insert the res express object to the view object
     this.response = response;
-};
+}
 
 /*
  |--------------------------------------------------------------------------
