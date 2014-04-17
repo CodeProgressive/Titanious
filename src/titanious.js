@@ -91,6 +91,24 @@ var appClass = require(paths.__system + "app.js"),
 
 /*
  |--------------------------------------------------------------------------
+ | Enable loggin through CP-logger
+ |--------------------------------------------------------------------------
+ |
+ | Use the codeProgressive logger module for the logging of the entire
+ | application. Because it's used almost everywhere, we include it into the
+ | app object.
+ |
+ */
+
+app.log = require( 'cp-logger' ).init( 3 , {
+
+    saveToFile : true,
+    filePath : paths.__log + "application.log"
+
+} );
+
+/*
+ |--------------------------------------------------------------------------
  | Register app modules
  |--------------------------------------------------------------------------
  |

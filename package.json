@@ -1,6 +1,6 @@
 {
   "name": "Titanious",
-  "description": "An open source webserver software management tool",
+  "description": "The open source webserver software management tool",
   "version": "0.0.1",
   "homepage": "http://codeprogressive.com",
   "author": {
@@ -17,10 +17,16 @@
     "test": "grunt nodeunit"
   },
   "dependencies" : {
+      "cp-logger" : "~0.0.4",
       "express": "~4.0.0",
+      "swig" : "~1.3.2",
       "morgan": "~1.0.0",
       "body-parser": "~1.0.0",
-      "method-override": "~1.0.0"
+      "method-override": "~1.0.0",
+      "daemon" : "~1.1.0",
+      "npm" : "~1.4.7",
+      "monitor" : "~0.6.9",
+      "require-all" : "~0.0.8"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",

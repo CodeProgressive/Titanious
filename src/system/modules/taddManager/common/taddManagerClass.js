@@ -85,9 +85,8 @@ taddManagerClass.prototype.init = function(callback) {
         }
 
         var validated = self.taddValidate.getValidTadds(directories);
-        console.log(validated);
 
-        callback(null);
+        callback(null, validated);
     });
 };
 

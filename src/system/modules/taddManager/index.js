@@ -52,11 +52,15 @@ var taddManagerBoot = function(app) {
 
     var self = this;
 
+    app.log.info("TaddManager : Booting...");
+
     app.taddManager.init(function(err){
 
         if(err) {
             throw err;
         }
+
+        app.log.info("TaddManager : Successfully completed booting");
 
         self.done();
     });

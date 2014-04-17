@@ -31,10 +31,12 @@ var expressInit = function(err, app) {
         throw err;
     }
 
+    app.log.info("Express : Booting...");
+
     // Require the "class" file
     var ExpressClass = require(__dirname + "/common/expressClass.js");
     // Instantiate the mongodb object
-    app.express = new ExpressClass(exports.name);
+    app.express = new ExpressClass(exports.name, app);
 };
 
 /*

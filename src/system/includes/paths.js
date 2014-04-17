@@ -43,6 +43,8 @@ var paths = {
     // Application
     "controllers" : "application" + path.sep + "controllers",
     "models" : "application" + path.sep + "models",
+    "public" : "application" + path.sep + "public",
+    "views" : "application" + path.sep + "views",
     "routes" : "application" + path.sep + "routes"
 };
 

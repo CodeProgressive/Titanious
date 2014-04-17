@@ -79,7 +79,7 @@ moduleSearchClass.prototype.localSearch = function(callback) {
     var self = this;
 
     if(typeof module.paths !== "object") {
-        // TODO: Throw error
+        callback("Module.paths error: The module.paths variable is not set correctly");
     }
 
     var directories = [];
