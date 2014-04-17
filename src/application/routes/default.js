@@ -17,12 +17,16 @@
 
 module.exports = {
 
-    "/" : function() {
+    "/" : function(model, view, controller) {
 
         return {
-            all : function(req, res) {
+            all : function(req) {
 
-                res.end("<h1>It works!</h1>");
+                if(!req.session.user) {
+                    return controller.call("user@login");
+                }
+
+                return controller.call("dashboard");
             }
         };
     }

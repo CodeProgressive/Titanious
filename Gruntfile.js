@@ -13,7 +13,8 @@ module.exports = function(grunt) {
     },
     jshint: {
       options: {
-        jshintrc: '.jshintrc'
+        jshintrc: '.jshintrc',
+        ignores: ['src/application/public','src/application/public/**']
       },
       gruntfile: {
         src: 'Gruntfile.js'

@@ -35,7 +35,7 @@ var expressInit = function(err, app) {
 
     // Require the "class" file
     var ExpressClass = require(__dirname + "/common/expressClass.js");
-    // Instantiate the mongodb object
+    // Instantiate the express object
     app.express = new ExpressClass(exports.name, app);
 };
 
@@ -54,7 +54,7 @@ exports.name = "express";
 
 // When the module is being registered
 exports.onRegister = function(app) {
-    // Wait for mongodb to load completely before starting anything!
+    // Wait for taddManager to load completely before starting anything!
     app.waitFor("taddManager", expressInit);
 };
 

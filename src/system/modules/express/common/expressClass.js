@@ -23,6 +23,8 @@
 
 var express         = require('express'),
     swig            = require('swig'),
+    cookieParser    = require('cookie-parser'),
+    session         = require('express-session'),
     morgan          = require('morgan'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
@@ -53,7 +55,10 @@ var default_options = {
         port : 3333
     },
 
-    default_route_file : "default"
+    default_action : "index",
+    default_route_file : "default",
+
+    session_secret : "kYqJceJ90iEkyVNWZCpIQuUIUS9kma4VU0fOhTcaJ5YW64PwPnYPVAmeOtqZQQ5"
 };
 
 /*
@@ -68,49 +73,50 @@ var default_options = {
  */
 var expressClass = function(name, app) {
 
-    // Extend the express class to this one
-    var self = this;
     // Create the express app
-    self.app = express();
-
-    // This is where all the magic happens!
-    self.app.engine('html', swig.renderFile);
-
-    // View engine
-    self.app.set('view engine', 'html');
-    // The view directory
-    self.app.set('views', paths.__views);
-
-    // set the static files location /public/img will be /img for users
-    self.app.use(express.static(paths.__public));
-    // pull information from html in POST
-    self.app.use(bodyParser());
-    // simulate DELETE and PUT
-    self.app.use(methodOverride());
+    this.app = express();
 
     // Merge the default options with the options set in the config file
-    self.options = new OptionsClass(name).merge(default_options);
+    this.options = new OptionsClass(name).merge(default_options);
 
     // Make sure the port is a number
-    if(typeof self.options.connection.port !== 'number') {
-        self.options.connection.port = parseInt(self.options.connection.port,10);
+    if(typeof this.options.connection.port !== 'number') {
+        this.options.connection.port = parseInt(this.options.connection.port,10);
     }
 
-    this.init(self, function(){
+    // This is where all the template parse magic happens!
+    this.app.engine('html', swig.renderFile);
 
-        if(app.options.dev) {
-            // log every request to the console
-            self.app.use(morgan('dev'));
-            // Disable caching by express:
-            self.app.set('view cache', false);
-            // Disable swig caching
-            swig.setDefaults({ cache: false });
-        }
+    // View engine
+    this.app.set('view engine', 'html');
+    // The view directory
+    this.app.set('views', paths.__views);
 
-        self.app.listen(self.options.connection.port);
+    // set the static files location /public/img will be /img for users
+    this.app.use(express.static(paths.__public));
+    // pull information from html in POST
+    this.app.use(bodyParser());
+    // simulate DELETE and PUT
+    this.app.use(methodOverride());
+    // use cookies
+    this.app.use(cookieParser());
+    // use sessions
+    this.app.use(session({ secret: this.options.session_secret, key: 'sid', cookie: { secure: true }}));
 
-        app.log.info("Express : Sucessfully booted and listening on port: " + self.options.connection.port);
-    });
+    this.app.use(this.init(this));
+
+    if(app.options.dev) {
+        // log every request to the console
+        this.app.use(morgan('dev'));
+        // Disable caching by express:
+        this.app.set('view cache', false);
+        // Disable swig caching
+        swig.setDefaults({ cache: false });
+    }
+
+    this.app.listen(this.options.connection.port);
+
+    app.log.info("Express : Sucessfully booted and listening on port: " + this.options.connection.port);
 };
 
 /*
@@ -122,21 +128,24 @@ var expressClass = function(name, app) {
  | within the different routes
  |
  */
-expressClass.prototype.init = function(self, callback) {
+expressClass.prototype.init = function(self) {
 
-    var model = new modelClass(),
-        view = new viewClass(),
-        controller = new controllerClass(),
-        router = new routerClass(model, view, controller);
+    return function(req,res,next) {
 
-    router.getRouter(self, function(err){
+        var model = new modelClass(),
+            view = new viewClass(res),
+            controller = new controllerClass(self.options, model, view),
+            router = new routerClass(model, view, controller);
 
-        if(err) {
-            callback(err);
-        }
+        router.getRouter(self, function(err){
 
-        callback(null);
-    });
+            if(err) {
+                throw new Error(err);
+            }
+
+            next();
+        });
+    };
 };
 
 // Export the module!
