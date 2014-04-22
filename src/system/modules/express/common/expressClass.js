@@ -22,7 +22,7 @@
  */
 
 var express         = require('express'),
-    gaikan          = require('gaikan'),
+    swig            = require('swig'),
     cookieParser    = require('cookie-parser'),
     session         = require('express-session'),
     morgan          = require('morgan'),
@@ -89,13 +89,16 @@ var expressClass = function(name, app) {
         self.options.connection.port = parseInt(self.options.connection.port,10);
     }
 
-    // Set the template engine to gaikan (the fastest there is!)
-    self.app.engine('html', gaikan);
+    // Set the template engine to swig
+    self.app.engine('html', swig.renderFile);
 
     // View engine
     self.app.set('view engine', '.html');
     // The view directory
     self.app.set('views', paths.__views);
+
+    // Disable caching by express, swig will cache it, don't worry...
+    self.app.set('view cache', false);
 
     // set the static files location /public/img will be /img for users
     self.app.use(express.static(paths.__public));
@@ -126,8 +129,8 @@ var expressClass = function(name, app) {
         if(app.options.dev) {
             // log every request to the console
             self.app.use(morgan('dev'));
-            // Disable caching by express:
-            self.app.set('view cache', false);
+            // Disable cache by swig when in development
+            swig.setDefaults({ cache: false });
         }
 
         self.app.listen(self.options.connection.port);

@@ -34,7 +34,7 @@ var userController = function(model, view) {
 userController.prototype.login = function(body, req, res) {
 
     // View object to filled or not to be filled...
-    var o = {},
+    var o = { error : false },
         self = this,
         form = new formClass(),
         user = new userClass();
@@ -57,7 +57,7 @@ userController.prototype.login = function(body, req, res) {
 
         if(err) {
 
-            o = { error : "Please correct the incorrect fields" , fields : err };
+            o = { error : "I didn't seem to hear you well enough?" , fields : err };
 
         } else {
 
