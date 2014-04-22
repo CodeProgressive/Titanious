@@ -63,12 +63,15 @@ userController.prototype.login = function(body, req, res) {
 
             return user.checkCredentials(req.sessionID, body.username, body.password, function(err, result){
 
-                req.session.user = result;
-
                 if(err || !result) {
                     o = { error : "Username or password incorrect." };
                     return self.view.make("login.html", o);
                 }
+
+                // Set the session
+                req.session.user = {
+                    details: result
+                };
 
                 return res.redirect("/dashboard");
             });

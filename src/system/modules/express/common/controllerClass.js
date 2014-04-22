@@ -56,6 +56,9 @@ var controllerClass = function(options, model, view) {
  */
 controllerClass.prototype.call = function(caName, args) {
 
+    // We need 'this' later on...
+    var self = this;
+
     // We need a string in the first argument
     if(typeof caName !== 'string') {
         throw new Error("Controller method call expects parameter 1 to be string. " + typeof caName + " given.");
@@ -72,7 +75,7 @@ controllerClass.prototype.call = function(caName, args) {
         }
 
         // The action is either defined, or you will need the default action
-        var action = ((direction[1])?direction[1]:this.options.default_action);
+        var action = ((direction[1])?direction[1]:self.options.default_action);
 
         if(typeof controller[action] !== 'function') {
             throw new Error("Action: " + action + " could not be found in controller: " + direction[0]);

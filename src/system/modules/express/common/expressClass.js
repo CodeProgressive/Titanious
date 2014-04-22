@@ -35,6 +35,8 @@ var express         = require('express'),
     viewClass       = require(__dirname + paths.ds + "viewClass"),
     controllerClass = require(__dirname + paths.ds + "controllerClass"),
 
+    addMiddlewareClass = require("../lib/addMiddlewareClass.js"),
+
     OptionsClass    = require(paths.__common + "options.js");
 
 /*
@@ -104,23 +106,34 @@ var expressClass = function(name, app) {
     // use cookies
     self.app.use(cookieParser());
     // use sessions
-    self.app.use(session({ secret: self.options.session_secret, key: 'sid', cookie: { secure: true }}));
-    // Our own middleware
-    self.app.use(self.resetRoute(self, app.options));
+    self.app.use(session({ secret: self.options.session_secret, key: 'sid', cookie: { maxAge: 600000 }}));
 
-    // Initialize the default objects used
-    self.init();
+    // Use our middleware class to fetch more middleware
+    var addMiddleWare = new addMiddlewareClass();
+    // Add middleware in the application folder
+    addMiddleWare.addFolder(self.app, paths.__middleware, function(err){
 
-    if(app.options.dev) {
-        // log every request to the console
-        self.app.use(morgan('dev'));
-        // Disable caching by express:
-        self.app.set('view cache', false);
-    }
+        if(err) {
+            throw new Error(err);
+        }
 
-    self.app.listen(self.options.connection.port);
+        // Our own middleware
+        self.app.use(self.resetRoute(self));
 
-    app.log.info("Express : Sucessfully booted and listening on port: " + self.options.connection.port);
+        // Initialize the default objects used
+        self.init();
+
+        if(app.options.dev) {
+            // log every request to the console
+            self.app.use(morgan('dev'));
+            // Disable caching by express:
+            self.app.set('view cache', false);
+        }
+
+        self.app.listen(self.options.connection.port);
+
+        app.log.info("Express : Sucessfully booted and listening on port: " + self.options.connection.port);
+    });
 };
 
 /*
@@ -160,11 +173,6 @@ expressClass.prototype.init = function() {
 expressClass.prototype.resetRoute = function(self) {
 
     return function(req,res,next) {
-
-        // Make sure we are logged in, otherwise no access to anything!
-        if(req.url !== "/user/login" && !req.session.user) {
-            return res.redirect("/user/login");
-        }
 
         self.view.setResponse(res);
 
