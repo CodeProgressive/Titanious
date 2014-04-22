@@ -68,7 +68,7 @@ formClass.prototype.checkForError = function(object) {
             if(typeof err !== 'object') {
                 err = {};
             }
-            err.fieldName = "This field is required";
+            err[fieldName] = "has-error";
         }
 
         switch(object[fieldName].type) {

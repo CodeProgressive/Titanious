@@ -41,7 +41,9 @@ var options = function(_path) {
             _path,
             _path + ".js",
             paths.__config + _path,
-            paths.__config + _path + ".js"
+            paths.__config + _path + ".js",
+            paths.__config + "modules" + paths.ds + _path,
+            paths.__config + "modules" + paths.ds + _path + ".js"
         ]
         .forEach(function(p){
 

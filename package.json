@@ -26,6 +26,7 @@
       "body-parser": "~1.0.0",
       "method-override": "~1.0.0",
       "daemon" : "~1.1.0",
+      "locale" : "*",
       "npm" : "~1.4.7",
       "os-utils" : "*",
       "require-all" : "~0.0.8",

@@ -19,7 +19,7 @@
 
 var clClass = require('./../cl.js'),
     paths = require("./../../includes/paths.js"),
-    ssh = require(paths.__data + "ssh_sessions.js");
+    ssh = require(paths.__static + "ssh_sessions.js");
 
 /*
  |--------------------------------------------------------------------------

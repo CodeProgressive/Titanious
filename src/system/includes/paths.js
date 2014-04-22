@@ -38,7 +38,7 @@ var paths = {
     // System
     "common" : "system" + path.sep + "common",
     "modules" : "system" + path.sep + "modules",
-    "data" : "system" + path.sep + "data",
+    "static" : "system" + path.sep + "static",
     "includes" : "system" + path.sep + "includes",
 
     // Application
