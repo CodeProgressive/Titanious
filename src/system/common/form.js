@@ -94,6 +94,9 @@ formClass.prototype.checkForError = function(object) {
  |
  */
 formClass.prototype.removeWhiteSpace = function(string) {
+    if(typeof string !== 'string') {
+        return string;
+    }
     return string.replace(/\s+/, "");
 };
 

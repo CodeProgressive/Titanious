@@ -65,7 +65,7 @@ userController.prototype.login = function(body, req, res) {
 
                 if(err || !result) {
                     o = { error : "Username or password incorrect." };
-                    return self.view.make("login.html", o);
+                    return self.view.make("signin.html", o);
                 }
 
                 // Set the session
@@ -79,7 +79,7 @@ userController.prototype.login = function(body, req, res) {
     }
 
     // Make the login view
-    return self.view.make("login.html", o);
+    return self.view.make("signin.html", o);
 };
 
 // Export the module!
