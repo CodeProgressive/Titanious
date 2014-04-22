@@ -18,22 +18,24 @@
 
 'use strict';
 
-var cp  = require('child_process');
+var osClass     = require("./os.js"),
+    formClass   = require("./form.js");
+
 
 /*
  |--------------------------------------------------------------------------
  | The constructor
  |--------------------------------------------------------------------------
- |
- | Because...
- |
  */
 
-var clClass = function() {};
+var clClass = function() {
+    this.os = new osClass();
+    this.form = new formClass();
+};
 
 /*
  |--------------------------------------------------------------------------
- | bufferExec, Exec done the right way (with buffers)
+ | stdinCommand, Exec done the right way (with buffers)
  |--------------------------------------------------------------------------
  |
  | We need a way to use exec and automatically buffer everything that the
@@ -42,24 +44,52 @@ var clClass = function() {};
  |
  */
 
-clClass.prototype.bufferExec = function(command, callback) {
+clClass.prototype.stdinCommand = function(command, callback) {
 
-    var e = cp.exec(command),
+    var self = this,
+        terminal = require('child_process').spawn(((self.os.platform === 'windows')?'cmd':'bash')),
+        err = [],
         list = [];
 
-    e.stdout.setEncoding('utf8');
-
-    e.stdout.on('error', function(err){
-        callback(err);
+    terminal.stdout.on('data', function (chunk) {
+        // Binary buffer returned, decode it
+        list.push(new Buffer(chunk, "base64").toString());
     });
 
-    e.stdout.on('data', function (chunk) {
-        list.push(chunk);
+    terminal.stderr.on('data', function (data) {
+        // Binary buffer returned, decode it
+        err.push(new Buffer(data, "base64").toString());
     });
 
-    e.stdout.on('end', function () {
-        callback(null, list.join().toString().split('\n'));
+    terminal.stderr.on('end', function () {
+
+        if(err.length > 0) {
+            return callback(err.join().toString().split('\n').filter(
+                function(n){
+                    return (typeof n !== 'undefined' && self.form.removeWhiteSpace(n).length > 0);
+                }).map(function(i){
+                    return ((i.charAt(0) === ',')? i.substr(1):i);
+                }));
+        }
+
+        if(list.length > 0) {
+            return callback(null, list.join().toString().split('\n').filter(
+                function(n){
+                    return (typeof n !== 'undefined' && self.form.removeWhiteSpace(n).length > 0);
+                }).map(function(i){
+                    return ((i.charAt(0) === ',')? i.substr(1):i);
+                }));
+        }
     });
+
+
+    terminal.on('exit', function () {
+
+        //TODO : Nice exit code here... use parameters code, signal (which are removed to pass the grunt test)
+    });
+
+    terminal.stdin.write(command);
+    terminal.stdin.end();
 };
 
 // Export the module!

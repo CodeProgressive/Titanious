@@ -19,6 +19,30 @@
 
 /*
  |--------------------------------------------------------------------------
+ | Root access cap
+ |--------------------------------------------------------------------------
+ |
+ | Make sure we deny root access by logging into our created Titanious
+ | user. This user will have limited access to do only the absolute
+ | necessary functions.
+ |
+ */
+
+try {
+
+    // Set the group id
+    process.setgid('titanious');
+    // Set the user id
+    process.setuid('titanious');
+
+} catch(e) {
+
+    console.log("Titanious must run as root.");
+    process.exit(1);
+}
+
+/*
+ |--------------------------------------------------------------------------
  | Default application options
  |--------------------------------------------------------------------------
  |

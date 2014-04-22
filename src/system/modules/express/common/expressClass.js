@@ -73,51 +73,54 @@ var default_options = {
  */
 var expressClass = function(name, app) {
 
+    // We need 'this' later on
+    var self = this;
+
     // Create the express app
-    this.app = express();
+    self.app = express();
 
     // Merge the default options with the options set in the config file
-    this.options = new OptionsClass(name).merge(default_options);
+    self.options = new OptionsClass(name).merge(default_options);
 
     // Make sure the port is a number
-    if(typeof this.options.connection.port !== 'number') {
-        this.options.connection.port = parseInt(this.options.connection.port,10);
+    if(typeof self.options.connection.port !== 'number') {
+        self.options.connection.port = parseInt(self.options.connection.port,10);
     }
 
     // Set the template engine to gaikan (the fastest there is!)
-    this.app.engine('html', gaikan);
+    self.app.engine('html', gaikan);
 
     // View engine
-    this.app.set('view engine', '.html');
+    self.app.set('view engine', '.html');
     // The view directory
-    this.app.set('views', paths.__views);
+    self.app.set('views', paths.__views);
 
     // set the static files location /public/img will be /img for users
-    this.app.use(express.static(paths.__public));
+    self.app.use(express.static(paths.__public));
     // pull information from html in POST
-    this.app.use(bodyParser());
+    self.app.use(bodyParser());
     // simulate DELETE and PUT
-    this.app.use(methodOverride());
+    self.app.use(methodOverride());
     // use cookies
-    this.app.use(cookieParser());
+    self.app.use(cookieParser());
     // use sessions
-    this.app.use(session({ secret: this.options.session_secret, key: 'sid', cookie: { secure: true }}));
+    self.app.use(session({ secret: self.options.session_secret, key: 'sid', cookie: { secure: true }}));
     // Our own middleware
-    this.app.use(this.resetRoute(this));
+    self.app.use(self.resetRoute(self, app.options));
 
     // Initialize the default objects used
-    this.init();
+    self.init();
 
     if(app.options.dev) {
         // log every request to the console
-        this.app.use(morgan('dev'));
+        self.app.use(morgan('dev'));
         // Disable caching by express:
-        this.app.set('view cache', false);
+        self.app.set('view cache', false);
     }
 
-    this.app.listen(this.options.connection.port);
+    self.app.listen(self.options.connection.port);
 
-    app.log.info("Express : Sucessfully booted and listening on port: " + this.options.connection.port);
+    app.log.info("Express : Sucessfully booted and listening on port: " + self.options.connection.port);
 };
 
 /*
@@ -132,9 +135,9 @@ var expressClass = function(name, app) {
 
 expressClass.prototype.init = function() {
 
-    this.model = new modelClass(),
-    this.view = new viewClass(),
-    this.controller = new controllerClass(this.options, this.model, this.view),
+    this.model = new modelClass();
+    this.view = new viewClass();
+    this.controller = new controllerClass(this.options, this.model, this.view);
     this.router = new routerClass(this.model, this.view, this.controller);
 
     this.router.getRouter(this, function(err){
@@ -143,7 +146,7 @@ expressClass.prototype.init = function() {
             throw new Error(err);
         }
     });
-}
+};
 
 /*
  |--------------------------------------------------------------------------
@@ -158,9 +161,22 @@ expressClass.prototype.resetRoute = function(self) {
 
     return function(req,res,next) {
 
+        // Make sure we are logged in, otherwise no access to anything!
+        if(req.url !== "/user/login" && !req.session.user) {
+            return res.redirect("/user/login");
+        }
+
         self.view.setResponse(res);
+
+        // TODO : Reset the routes when in development mode (below doesn't quite work)
+//        if(options.dev) {
+//
+//            self.app.routes = {};
+//            self.init();
+//        }
+
         next();
-    }
+    };
 };
 
 // Export the module!

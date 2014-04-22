@@ -20,11 +20,7 @@ module.exports = {
     "/" : function(model, view, controller) {
 
         return {
-            all : function(req) {
-
-                if(!req.session.user) {
-                    return controller.call("user@login");
-                }
+            all : function() {
 
                 return controller.call("dashboard");
             }

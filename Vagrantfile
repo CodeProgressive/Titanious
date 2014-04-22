@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 80, host: 8080
   config.vm.network :forwarded_port, guest: 3333, host: 3333
 
-  config.vm.synced_folder "./src", "/src", id: "vagrant-root", :mount_options => ["dmode=777","fmode=777"]
+  config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
 
   config.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--memory", 1024]

@@ -42,7 +42,7 @@ viewClass.prototype.setResponse = function(response) {
 
     // Insert the res express object to the view object
     this.response = response;
-}
+};
 
 /*
  |--------------------------------------------------------------------------

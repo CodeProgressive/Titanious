@@ -27,12 +27,20 @@ module.exports = {
         };
     },
 
-    "/login" : function() {
+    "/login" : function(model, view, controller) {
 
         return {
-            all : function(req, res) {
+            get : function(req, res) {
 
-                res.end("User login route");
+                if(req.session.user) {
+                    return res.redirect("/");
+                }
+
+                return controller.call("user@login");
+            },
+            post : function(req, res) {
+
+                return controller.call("user@login", [req.body, req, res]);
             }
         };
     }

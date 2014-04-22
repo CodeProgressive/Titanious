@@ -98,7 +98,7 @@ moduleSearchClass.prototype.globalSearch = function(callback) {
 
     var self = this;
 
-    this.cl.bufferExec('npm config get prefix', function(err, stdout){
+    this.cl.stdinCommand('npm config get prefix', function(err, stdout){
 
         if (err) {
             callback(err, null);

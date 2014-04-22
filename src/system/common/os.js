@@ -7,7 +7,9 @@
  *     |_| |___| |_/_/   \_|_| \_|___\___/ \___/|____/
  *
  *
- * MODEL CLASS FILE
+ * OS (operating system) HELPER
+ *
+ * A helper file for fetching OS information
  *
  * @author Jimmy Aupperlee <jimmy@codeprogressive.com>
  * @copyright codeProgressive
@@ -15,24 +17,34 @@
 
 'use strict';
 
-/*
- |--------------------------------------------------------------------------
- | Required modules
- |--------------------------------------------------------------------------
- */
-
-//var paths = require('../../../includes/paths.js');
+var os = require('os-utils');
 
 /*
  |--------------------------------------------------------------------------
  | The constructor
  |--------------------------------------------------------------------------
+ */
+
+var osClass = function() {
+
+    this.info = this.getInfo();
+};
+
+/*
+ |--------------------------------------------------------------------------
+ | Get OS details
+ |--------------------------------------------------------------------------
  |
- |
+ | Fetch the defails of the OS, like name, version and such
  |
  */
 
-var modelClass = function() {};
+osClass.prototype.getInfo = function() {
+
+    return {
+        platform : os.platform()
+    };
+};
 
 // Export the module!
-module.exports = modelClass;
+module.exports = osClass;
