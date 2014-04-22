@@ -69,7 +69,7 @@ addMiddlewareClass.prototype.addFolder = function(app, path, callback) {
             return callback(null);
         });
     });
-}
+};
 
 
 // Export the module!
