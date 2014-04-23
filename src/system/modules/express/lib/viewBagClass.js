@@ -17,14 +17,55 @@
 
 /*
  |--------------------------------------------------------------------------
+ | Required modules
+ |--------------------------------------------------------------------------
+ */
+
+var paths        = require("../../../includes/paths.js"),
+    fs           = require("fs"),
+    locale       = require("locale"),
+    OptionsClass = require(paths.__common + "options.js");
+
+/*
+ |--------------------------------------------------------------------------
+ | Default options object
+ |--------------------------------------------------------------------------
+ |
+ | This object will be used to create a new config file when one doesn't
+ | exist already inside the root/config folder. It will also be
+ | used to define the default values of these options.
+ |
+ */
+
+var default_options = {
+
+    locale : {
+
+        default_language : "en-US",
+        available_languages : [
+            "en-US"
+        ]
+    }
+};
+
+/*
+ |--------------------------------------------------------------------------
  | The constructor
  |--------------------------------------------------------------------------
  */
 
-var viewBagClass = function() {
+var viewBagClass = function(accepted_languages) {
 
+    // Merge the default options with the options set in the config file
+    this.options = new OptionsClass("general").merge(default_options);
     // Create the viewbag variable used throughout the class
     this.viewBag = {};
+    // Set the default language
+    this.default = locale.Locale[accepted_languages || this.options.locale.default_language];
+    // Supported languages
+    this.supported = new locale.Locales(this.options.locale.available_languages);
+    // Set the locales object
+    this.locales = new locale.Locales(accepted_languages);
 };
 
 /*
@@ -37,19 +78,39 @@ var viewBagClass = function() {
  | over the items already in there.
  |
  */
-viewBagClass.prototype.addFolder = function(path) {
+viewBagClass.prototype.addFolder = function(path, callback) {
 
-    // Use require all to require all files
-    var files = require("require-all")(path);
-    // Now loop through and add to the viewBag
-    for(var x in files) {
-        console.log(x);
-    }
+    var self = this;
+
+    return fs.exists(path, function(result){
+
+        if(!result) {
+            return callback("viewBagClass.addFolder: Given folder does not exist");
+        }
+
+        return fs.readdir(path, function(err, files){
+
+            if(err) {
+                return callback(err);
+            }
+
+            files.forEach(function(file){
+
+                if(!fs.statSync(path + file).isDirectory()) {
+                    // Merge the file with the viewBag
+                    self.merge(require(path + file));
+                }
+            });
+
+            // Execute the callback
+            return callback(null);
+        });
+    });
 };
 
 /*
  |--------------------------------------------------------------------------
- | AddLocale
+ | AddLocale Folder
  |--------------------------------------------------------------------------
  |
  | Expects a path to a folder containing multiple folders with language
@@ -58,9 +119,67 @@ viewBagClass.prototype.addFolder = function(path) {
  | default language and not in the preferred language.
  |
  */
-viewBagClass.prototype.addLocaleFolder = function(path) {
+viewBagClass.prototype.addLocaleFolder = function(path, callback) {
 
-    console.log(path);
+    var self = this;
+
+    return fs.exists(path, function(result){
+
+        if(!result) {
+            return callback("viewBagClass.addFolder: Given folder does not exist");
+        }
+
+        [
+            path + self.default,
+            path + self.locales.best(self.supported)
+        ]
+        .forEach(function(valPath){
+
+            if(fs.existsSync(valPath)) {
+
+                self.addFolder(valPath);
+            }
+        });
+
+        // Execute the callback
+        return callback(null);
+    });
+};
+
+/*
+ |--------------------------------------------------------------------------
+ | Recursive merge
+ |--------------------------------------------------------------------------
+ |
+ | We need the object to be merged recursivly. This function is mostly used
+ | from within the class itself.
+ |
+ */
+viewBagClass.prototype.recursiveMerge = function(originalViewBag, newViewBag) {
+
+    // Loop through all the values in the new viewBag
+    for (var p in newViewBag) {
+
+        try {
+            // Property in destination object set; update its value.
+            if ( newViewBag[p].constructor === Object ) {
+
+                originalViewBag[p] = this.recursiveMerge(originalViewBag[p], newViewBag[p]);
+
+            } else {
+
+                originalViewBag[p] = newViewBag[p];
+
+            }
+
+        } catch(e) {
+            // Property in destination object not set; create it and set its value.
+            originalViewBag[p] = newViewBag[p];
+
+        }
+    }
+
+    return originalViewBag;
 };
 
 /*
@@ -74,14 +193,8 @@ viewBagClass.prototype.addLocaleFolder = function(path) {
  */
 viewBagClass.prototype.merge = function(viewBag) {
 
-    var h = {},
-        n = [];
-
-    viewBag.concat(this.viewBag).map(function(b){
-        h[b] = h[b] || n.push(b);
-    });
-
-    return n;
+    // Merge that stuff recursively!
+    this.viewBag = this.recursiveMerge(this.viewBag, viewBag);
 };
 
 /*
@@ -99,25 +212,18 @@ viewBagClass.prototype.merge = function(viewBag) {
  | key name of the first parameter inside the viewBag.
  |
  */
-viewBagClass.prototype.set = function(input, variable) {
+viewBagClass.prototype.set = function(key, value) {
 
-    // If the first parameter is an object, then import it as such!
-    if(typeof input === 'object') {
-        for(var key in input) {
-            this.viewBag[key] = input[key];
-        }
+    if(typeof key !== 'string') {
+        throw new Error("ViewBagClass.set expects the first parameter to be of type string, " + typeof key + " given.");
     }
 
-    // If the second parameter is set, then we are dealing with a key value pair
-    if(typeof variable === 'string') {
-
-        if(typeof input !== 'string') {
-            throw new Error("viewBagClass.set expects the first parameter to be a string when the second parameter is set, " + typeof input + " given.");
-        }
-
-        // Set the variable accordingly
-        this.viewBag[input] = variable;
+    if(typeof value === 'undefined') {
+        throw new Error("ViewBagClass.set expects the second parameter to be set.");
     }
+
+    // Set the value
+    this.viewBag[key] = value;
 };
 
 // Export the module!

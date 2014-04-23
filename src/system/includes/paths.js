@@ -43,6 +43,7 @@ var paths = {
 
     // Application
     "controllers" : "application" + path.sep + "controllers",
+    "locale" : "application" + path.sep + "locale",
     "middleware" : "application" + path.sep + "middleware",
     "models" : "application" + path.sep + "models",
     "public" : "application" + path.sep + "public",

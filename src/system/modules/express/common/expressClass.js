@@ -178,15 +178,15 @@ expressClass.prototype.resetRoute = function(self) {
     return function(req,res,next) {
 
         self.view.setResponse(res);
+        // Make the viewBag
+        self.view.setViewBag(req.headers["accept-language"], function(err){
 
-        // TODO : Reset the routes when in development mode (below doesn't quite work)
-//        if(options.dev) {
-//
-//            self.app.routes = {};
-//            self.init();
-//        }
+            if(err) {
+                throw new Error(err);
+            }
 
-        next();
+            next();
+        });
     };
 };
 

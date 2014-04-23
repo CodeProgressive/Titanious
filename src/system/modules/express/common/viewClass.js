@@ -21,8 +21,9 @@
  |--------------------------------------------------------------------------
  */
 
-var fs      = require('fs'),
-    paths   = require('../../../includes/paths.js');
+var fs              = require('fs'),
+    viewBagClass    = require('../lib/viewBagClass.js'),
+    paths           = require('../../../includes/paths.js');
 
 /*
  |--------------------------------------------------------------------------
@@ -44,6 +45,40 @@ viewClass.prototype.setResponse = function(response) {
     this.response = response;
 };
 
+
+/*
+ |--------------------------------------------------------------------------
+ | Set viewBag
+ |--------------------------------------------------------------------------
+ */
+
+viewClass.prototype.setViewBag = function(acceptedLanguages, callback) {
+
+    // We need 'this' inside the callback
+    var self = this;
+
+    // Insert the res express object to the view object
+    this.viewBag = new viewBagClass(acceptedLanguages);
+    // Add the default locale folder
+    this.viewBag.addFolder(paths.__locale, function(err){
+
+        if(err) {
+            callback(err);
+        }
+
+        // Add the general language locale folder
+        self.viewBag.addLocaleFolder(paths.__locale, function(err){
+
+            if(err) {
+                callback(err);
+            }
+
+            // Now execute the callback
+            callback(null);
+        });
+    });
+};
+
 /*
  |--------------------------------------------------------------------------
  | Make the view
@@ -57,6 +92,9 @@ viewClass.prototype.make = function(filePath, viewBag) {
     // We need 'this' inside the callback
     var self = this;
 
+    // Merge the inserted viewBag last
+    this.viewBag.merge(viewBag);
+
     // Check if the controller file exists
     fs.exists(paths.__views + filePath, function(exists){
 
@@ -66,7 +104,7 @@ viewClass.prototype.make = function(filePath, viewBag) {
         }
 
         // Render the application through swig
-        self.response.render(filePath, viewBag || {}, function(err , html){
+        self.response.render(filePath, self.viewBag.viewBag || viewBag || {}, function(err , html){
 
             if(err) {
                 throw new Error(err);
