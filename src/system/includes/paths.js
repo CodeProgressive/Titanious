@@ -31,7 +31,9 @@ var paths = {
 
     // General
     "application" : "application",
-    "log" : "log",
+    "var" : "var",
+    "datastore" : "var" + path.sep + "datastore",
+    "log" : "var" + path.sep + "log",
     "config" : "config",
     "system" : "system",
 

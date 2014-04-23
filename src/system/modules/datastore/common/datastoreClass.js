@@ -25,6 +25,7 @@
  */
 
 var paths               = require('../../../includes/paths.js'),
+    Datastore           = require('nedb'),
     OptionsClass        = require(paths.__common + "options.js");
 
 /*
@@ -40,7 +41,12 @@ var paths               = require('../../../includes/paths.js'),
 
 var default_options = {
 
-
+    databases : [
+        {
+            name : "general",
+            filename :  paths.__datastore + "general.db"
+        }
+    ]
 };
 
 /*
@@ -65,6 +71,16 @@ var datastoreClass = function(name) {
  |--------------------------------------------------------------------------
  */
 datastoreClass.prototype.init = function(callback) {
+
+    // We need 'this' in the callback
+    var self = this;
+
+    if(this.options.databases.length > 0) {
+        // connect every database in the options
+        this.options.databases.forEach(function(db){
+            self[db.name] = new Datastore({ filename: db.filename, autoload: true });
+        });
+    }
 
     callback(null);
 };
