@@ -7,39 +7,15 @@
  *     |_| |___| |_/_/   \_|_| \_|___\___/ \___/|____/
  *
  *
- * EXPRESS INDEX FILE
+ * MAIN INDEX FILE FOR THE DATASTORE
+ *
+ * This module manages the data storage through databases
  *
  * @author Jimmy Aupperlee <jimmy@codeprogressive.com>
  * @copyright codeProgressive
  */
 
 'use strict';
-
-/*
- |--------------------------------------------------------------------------
- | Boot after everything has loaded
- |--------------------------------------------------------------------------
- |
- | Here we are sure that everything we need is properly loaded and the
- | Express server can now start booting
- |
- */
-
-var expressInit = function(err, app, self) {
-
-    if(err) {
-        throw err;
-    }
-
-    app.log.info("Express : Booting...");
-
-    // Require the "class" file
-    var ExpressClass = require(__dirname + "/common/expressClass.js");
-    // Instantiate the express object
-    app.express = new ExpressClass(exports.name, app);
-
-    self.done();
-};
 
 /*
  |--------------------------------------------------------------------------
@@ -52,12 +28,15 @@ var expressInit = function(err, app, self) {
  */
 
 // The name of the module
-exports.name = "express";
+exports.name = "datastore";
 
 // When the module is being registered
 exports.onRegister = function(app) {
-    // Wait for taddManager to load completely before starting anything!
-    app.waitFor(exports.name, "taddManager", expressInit);
+
+    // Require the "class" file
+    var DatastoreClass = require(__dirname + "/common/datastoreClass.js");
+    // Instantiate the mongodb object
+    app.datastore = new DatastoreClass(exports.name);
 };
 
 /*
@@ -67,6 +46,23 @@ exports.onRegister = function(app) {
  */
 
 // Constructor
-var expressBoot = function() {};
+var datastoreBoot = function(app) {
 
-module.exports.boot = expressBoot;
+    var self = this;
+
+    app.log.info("Datastore : Booting...");
+
+    app.datastore.init(function(err){
+
+        if(err) {
+            throw err;
+        }
+
+        app.log.info("Datastore : Successfully completed booting");
+
+        self.done();
+    });
+
+};
+
+module.exports.boot = datastoreBoot;

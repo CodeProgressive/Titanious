@@ -30,7 +30,11 @@ var taddmanagerController = function(model, view) {
 taddmanagerController.prototype.index = function() {
 
     // Make the dashboard view
-    return this.view.make("index.html");
+    return this.view.make("tm_index.html", {
+        tad : {
+            available : this.app.taddManager.available
+        }
+    });
 };
 
 // Export the module!

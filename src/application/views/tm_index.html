@@ -1,0 +1,128 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %} {{ general_web_title }} {{ general_web_affix }} Tadd Manager {% endblock %}
+
+{% block nav %}
+
+<div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+<ul class="nav nav-main" data-ride="collapse">
+    <li>
+        <a href="/Dashboard" class="auto"> <i class="i i-statistics icon"> </i><span class="font-bold">Dashboard</span> </a>
+    </li>
+    <li class="active">
+        <a href="#" class="auto"> <span class="pull-right text-muted">
+        <i class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span><i class="i i-stack icon"> </i>
+        <span class="font-bold">Settings</span> </a>
+        <ul class="nav dk">
+            <li><a href="/settings/general" class="auto"> <i class="i i-dot"></i>
+                <span>General configuration</span> </a>
+            </li>
+            <li><a href="/settings/user" class="auto"> <i class="i i-dot"></i>
+                <span>User configuration</span> </a>
+            </li>
+            <li class="active"><a href="/taddmanager" class="auto"> <i class="i i-dot"></i>
+                <span>Tadd Manager</span> </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+{% endblock %}
+
+{% block content %}
+<section class="scrollable padder">
+    <div class="m-b-md"><h3 class="m-b-none">Tadd Manager</h3></div>
+    <div class="row">
+        <div class="col-sm-12">
+            <section class="panel panel-default">
+                <header class="panel-heading"><span class="label bg-danger pull-right m-t-xs">{{ tad.working.total }}</span> Processes
+                </header>
+                <table class="table table-striped m-b-none">
+                    <thead>
+                    <tr>
+                        <th>Progress</th>
+                        <th>Item</th>
+                        <th width="70"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for process in tad.working.processes %}
+                    <tr>
+                        <td>
+                            <div class="progress progress-sm progress-striped active m-t-xs m-b-none">
+                                <div class="progress-bar bg-success" data-toggle="tooltip" data-original-title="{{ process.percentage }}" style="width: {{ process.percentage }}"></div>
+                            </div>
+                        </td>
+                        <td>{{ process.name }}</td>
+                        <td class="text-right">
+                            <div class="btn-group">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="#">Stop</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+    <section class="panel panel-default">
+        <header class="panel-heading"> Available Tadds</header>
+        <div class="row wrapper">
+            <div class="col-sm-6 m-b-xs">
+                <select class="input-sm form-control input-s-sm inline v-middle">
+                    <option value="0">Bulk action</option>
+                    <option value="1">Install Tadds</option>
+                    <option value="2">Remove Tadds</option>
+                </select>
+                <button class="btn btn-sm btn-default">Apply</button>
+            </div>
+            <div class="col-sm-6 m-b-xs">
+                <button type="button" class="hover btn btn-info pull-right"><i class="i i-rotate i-sm text-white hover-rotate"></i> Refresh</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped b-t b-light">
+                <thead>
+                <tr>
+                    <th width="20"><label class="checkbox m-n i-checks"><input type="checkbox"><i></i></label></th>
+                    <th class="th-sortable" data-toggle="class">Name <span class="th-sort"> <i class="fa fa-sort-down text"></i> <i class="fa fa-sort-up text-active"></i> <i class="fa fa-sort"></i> </span></th>
+                    <th>Status</th>
+                    <th width="30"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tad in tad.available %}
+                <tr>
+                    <td><label class="checkbox m-n i-checks"><input type="checkbox" name="tadd[]" value="{{ tad.name }}"><i></i></label></td>
+                    <td><strong>{{ tad.name }}</strong></td>
+                    <td>{{ tad.status }}</td>
+                    <td>
+                        {% for button in tad.actions %}
+                        <button type="button" data-action="{{ button.action }}" class="hover btn btn-info"><i class="i {{ button.icon }} i-sm text-white hover-rotate"></i> {{ button.name }}</button>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-sm-12 hidden-xs"><select class="input-sm form-control input-s-sm inline v-middle">
+                    <option value="0">Bulk action</option>
+                    <option value="1">Install Tadds</option>
+                    <option value="2">Remove Tadds</option>
+                </select>
+                    <button class="btn btn-sm btn-default">Apply</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</section>
+{% endblock %}

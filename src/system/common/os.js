@@ -41,9 +41,39 @@ var osClass = function() {
 
 osClass.prototype.getInfo = function() {
 
-    return {
-        platform : os.platform()
+    var freeMem = os.freememPercentage().toString(),
+        processUptime = os.processUptime().toString();
+
+    var ro = {
+        platform : os.platform(),
+        process : {
+            uptime: {
+                short : processUptime.substr(0, processUptime.length - 13),
+                long : processUptime
+            }
+        },
+        memory : {
+            total : os.totalmem(),
+            free : {
+                amount : os.freemem(),
+                percentage : {
+                    short : freeMem.substr(0, freeMem.indexOf(".") + 3),
+                    long : freeMem
+                }
+            }
+        },
+        harddrive : {
+
+        },
+        cpu : {
+            total : os.cpuCount()
+        },
+        system : {
+            uptime : os.sysUptime()
+        }
     };
+
+    return ro;
 };
 
 // Export the module!

@@ -56,9 +56,15 @@ taddValidateClass.prototype.getValidTadds = function(taddLocationArray) {
 
     taddLocationArray.forEach(function(dir) {
 
-        if(fs.existsSync(dir + paths.ds + "tadd_config.js")) {
+        if(fs.existsSync(dir + paths.ds + "tadd.json")) {
 
-            validTaddArray.push(dir);
+            var json = fs.readFileSync(dir + paths.ds + "tadd.json");
+            json = JSON.parse(json);
+
+            validTaddArray.push({
+                name : json.name || dir.substr(dir.lastIndexOf("/") + 1),
+                path : dir
+            });
         }
     });
 

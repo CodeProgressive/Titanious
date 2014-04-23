@@ -1,0 +1,51 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %} {{ general_web_title }} {{ general_web_affix }} Dashboard {% endblock %}
+
+{% block content %}
+<section class="scrollable padder">
+    <section class="row m-b-md">
+        <div class="col-sm-6">
+            <h3 class="m-b-xs text-black">Dashboard</h3>
+        </div>
+    </section>
+    <div class="row bg-light dk m-b">
+        <div class="col-sm-6">
+            <div class="panel b-a">
+                <div class="row m-n">
+                    <div class="col-md-6 b-b b-r"><a href="#" class="block padder-v hover"> <span
+                            class="i-s i-s-2x pull-left m-r-sm"> <i
+                            class="i i-hexagon2 i-s-base text-danger hover-rotate"></i> <i
+                            class="i i-gauge i-1x text-white"></i> </span> <span class="clear"> <span
+                            class="h3 block m-t-xs text-danger">{{ os.cpu.total }}</span> <small class="text-muted text-u-c">
+                        CPUs
+                    </small> </span> </a></div>
+                    <div class="col-md-6 b-b"><a href="#" class="block padder-v hover"> <span
+                            class="i-s i-s-2x pull-left m-r-sm"> <i
+                            class="i i-hexagon2 i-s-base text-success-lt hover-rotate"></i> <i
+                            class="i i-settings i-sm text-white"></i> </span> <span class="clear"> <span
+                            class="h3 block m-t-xs text-success">{{ os.memory.free.percentage.short }}</span> <span class="text-sm">%</span><small class="text-muted text-u-c">
+                        Free memory
+                    </small> </span> </a></div>
+                    <div class="col-md-6 b-b b-r"><a href="#" class="block padder-v hover"> <span
+                            class="i-s i-s-2x pull-left m-r-sm"> <i
+                            class="i i-hexagon2 i-s-base text-info hover-rotate"></i> <i
+                            class="i i-hexagon2 i-s-base text-info hover-rotate"></i> <i
+                            class="i i-data2 i-sm text-white"></i> </span> <span class="clear"> <span
+                            class="h3 block m-t-xs text-info">Calculating <span class="text-sm">...</span></span> <small
+                            class="text-muted text-u-c">
+                        Harddrive
+                    </small> </span> </a></div>
+                    <div class="col-md-6 b-b"><a href="#" class="block padder-v hover"> <span
+                            class="i-s i-s-2x pull-left m-r-sm"> <i
+                            class="i i-hexagon2 i-s-base text-primary hover-rotate"></i> <i
+                            class="i i-health i-sm text-white"></i> </span> <span class="clear"> <span
+                            class="h3 block m-t-xs text-primary">{{ os.process.uptime.short }}</span> <span class="text-sm">seconds</span> <small class="text-muted text-u-c">
+                        Titanious Uptime
+                    </small> </span> </a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

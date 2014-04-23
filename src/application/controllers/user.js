@@ -97,6 +97,11 @@ userController.prototype.login = function(body, req, res) {
 userController.prototype.logout = function(req, res) {
 
     req.session.destroy(function(err){
+
+        if(err) {
+            throw new Error(err);
+        }
+
         return res.redirect("/dashboard");
     });
 };

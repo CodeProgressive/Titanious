@@ -30,13 +30,13 @@ var settingsController = function(model, view) {
 settingsController.prototype.index = function() {
 
     // Make the dashboard view
-    return this.view.make("index.html");
+    return this.view.make("settings.html");
 };
 
 settingsController.prototype.user = function() {
 
     // Make the dashboard view
-    return this.view.make("index.html");
+    return this.view.make("settings_user.html");
 };
 
 // Export the module!

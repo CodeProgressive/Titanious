@@ -158,7 +158,9 @@ try {
         require(paths.__modules + "taddManager")
     );
 
-
+    app.register(
+        require(paths.__modules + "datastore")
+    );
 
 } catch(err) {
 

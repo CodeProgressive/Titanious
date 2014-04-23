@@ -124,7 +124,7 @@ var expressClass = function(name, app) {
         self.app.use(self.resetRoute(self));
 
         // Initialize the default objects used
-        self.init();
+        self.init(app);
 
         if(app.options.dev) {
             // log every request to the console
@@ -149,11 +149,11 @@ var expressClass = function(name, app) {
  |
  */
 
-expressClass.prototype.init = function() {
+expressClass.prototype.init = function(app) {
 
     this.model = new modelClass();
     this.view = new viewClass();
-    this.controller = new controllerClass(this.options, this.model, this.view);
+    this.controller = new controllerClass(app, this.options, this.model, this.view);
     this.router = new routerClass(this.model, this.view, this.controller);
 
     this.router.getRouter(this, function(err){
@@ -180,7 +180,7 @@ expressClass.prototype.resetRoute = function(self) {
         self.view.setResponse(res);
 
         // Make sure we are not dealing with a damn favicon
-        if(req.url != 'favicon.ico') {
+        if(req.url !== 'favicon.ico') {
 
             // Make the viewBag
             self.view.setViewBag(req.headers["accept-language"], function(err, viewBag){

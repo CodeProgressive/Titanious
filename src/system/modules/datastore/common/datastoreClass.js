@@ -25,8 +25,6 @@
  */
 
 var paths               = require('../../../includes/paths.js'),
-    moduleSearchClass   = require(__dirname + paths.ds + "moduleSearchClass.js"),
-    taddValidateClass   = require(__dirname + paths.ds + "taddValidateClass.js"),
     OptionsClass        = require(paths.__common + "options.js");
 
 /*
@@ -55,36 +53,20 @@ var default_options = {
  | the same name as the module
  |
  */
-var taddManagerClass = function(name) {
+var datastoreClass = function(name) {
 
     // Merge the default options with the options set in the config file
     this.options = new OptionsClass(name).merge(default_options);
-
-    // Instantiate the module search
-    this.moduleSearch = new moduleSearchClass();
-    // Instantiate the tadd validation
-    this.taddValidate = new taddValidateClass();
 };
 
 /*
  |--------------------------------------------------------------------------
- | The initialisation of Titanious Addons
+ | The initialisation of Datastore
  |--------------------------------------------------------------------------
  */
-taddManagerClass.prototype.init = function(callback) {
+datastoreClass.prototype.init = function(callback) {
 
-    var self = this;
-
-    return self.moduleSearch.search(function(err, directories){
-
-        if(err) {
-            return callback(err);
-        }
-
-        var validated = self.taddValidate.getValidTadds(directories);
-
-        callback(null, validated);
-    });
+    callback(null);
 };
 
 /*
@@ -96,10 +78,10 @@ taddManagerClass.prototype.init = function(callback) {
  | gracefully.
  |
  */
-taddManagerClass.prototype.destroy = function() {
+datastoreClass.prototype.destroy = function() {
 
 
 };
 
 // Export the module!
-module.exports = taddManagerClass;
+module.exports = datastoreClass;

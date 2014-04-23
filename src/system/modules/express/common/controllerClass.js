@@ -30,7 +30,9 @@ var paths = require('../../../includes/paths.js'),
  |--------------------------------------------------------------------------
  */
 
-var controllerClass = function(options, model, view) {
+var controllerClass = function(app, options, model, view) {
+    // Put the entire app in the object
+    this.app = app;
     // Insert the options into the object
     this.options = options;
     // Insert the model object into the object
@@ -115,6 +117,9 @@ controllerClass.prototype.getController = function(controllerName, callback) {
 
         // Get the controller file
         var controllerClass = require(paths.__controllers + controllerName + ".js");
+
+        // Insert the app into the prototype of the controller object
+        controllerClass.prototype.app = self.app;
 
         // Make sure the controller is a nice class
         if(typeof controllerClass !== 'function') {

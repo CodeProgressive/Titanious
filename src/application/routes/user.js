@@ -54,6 +54,6 @@ module.exports = {
 
                 return controller.call("user@logout", [req, res]);
             }
-        }
+        };
     }
 };

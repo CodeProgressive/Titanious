@@ -30,7 +30,7 @@ var userController = function(model, view) {
 userController.prototype.index = function() {
 
     // Make the dashboard view
-    return this.view.make("index.html");
+    return this.view.make("dashboard.html");
 };
 
 // Export the module!

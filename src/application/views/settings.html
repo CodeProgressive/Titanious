@@ -1,0 +1,39 @@
+{% extends 'layouts/main.html' %}
+
+{% block title %} {{ general_web_title }} {{ general_web_affix }} General configuration {% endblock %}
+
+{% block nav %}
+
+<div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
+<ul class="nav nav-main" data-ride="collapse">
+    <li>
+        <a href="/Dashboard" class="auto"> <i class="i i-statistics icon"> </i><span class="font-bold">Dashboard</span> </a>
+    </li>
+    <li class="active">
+        <a href="#" class="auto"> <span class="pull-right text-muted">
+        <i class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span><i class="i i-stack icon"> </i>
+            <span class="font-bold">Settings</span> </a>
+        <ul class="nav dk">
+            <li class="active"><a href="/settings/general" class="auto"> <i class="i i-dot"></i>
+                <span>General configuration</span> </a>
+            </li>
+            <li><a href="/settings/user" class="auto"> <i class="i i-dot"></i>
+                <span>User configuration</span> </a>
+            </li>
+            <li><a href="/taddmanager" class="auto"> <i class="i i-dot"></i>
+                <span>Tadd Manager</span> </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+{% endblock %}
+
+{% block content %}
+<section class="scrollable padder">
+    <div class="m-b-md"><h3 class="m-b-none">General settings</h3></div>
+    <div class="row">
+    </div>
+</section>
+</section>
+{% endblock %}

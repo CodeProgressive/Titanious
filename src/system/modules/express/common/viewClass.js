@@ -23,7 +23,8 @@
 
 var fs              = require('fs'),
     viewBagClass    = require('../lib/viewBagClass.js'),
-    paths           = require('../../../includes/paths.js');
+    paths           = require('../../../includes/paths.js'),
+    osClass         = require(paths.__common + "os.js");
 
 /*
  |--------------------------------------------------------------------------
@@ -59,6 +60,8 @@ viewClass.prototype.setViewBag = function(acceptedLanguages, callback) {
 
     // Insert the res express object to the view object
     this.viewBag = new viewBagClass(acceptedLanguages);
+    // Add OS Information
+    this.viewBag.set("os", new osClass().info);
     // Add the default locale folder
     this.viewBag.addFolder(paths.__locale, function(err){
 

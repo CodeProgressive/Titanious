@@ -46,7 +46,6 @@ var options = function(_path) {
             paths.__config + "modules" + paths.ds + _path + ".js"
         ]
         .forEach(function(p){
-
             // We will test to see if the path actually exists,
             // if it does, put it in the variable we are going to return
             if(fs.existsSync(p)) {
@@ -57,7 +56,8 @@ var options = function(_path) {
         return r;
     })();
 
-    this.config = require(path);
+    // When found, set the config, else set an empty object
+    this.config = ((typeof path === 'string') ? require(path) : {});
 };
 
 /*

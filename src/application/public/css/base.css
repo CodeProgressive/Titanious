@@ -3,7 +3,7 @@
 form .list-group .list-group-item.error {
     border-color: #d43f3a;
 }
-#login .navbar-brand img.logo {
+.login .navbar-brand img.logo {
     max-height: inherit;
     width: 300px;
 }
@@ -11,4 +11,12 @@ form .list-group .list-group-item.error {
     clear: both;
     margin-top: 20px;
     width: 100px;
+}
+
+/* BASIC RESETS */
+
+/* No blue chrome outline */
+button:focus {
+    outline: none;
+    box-shadow: none;
 }

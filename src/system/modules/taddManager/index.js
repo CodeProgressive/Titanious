@@ -20,6 +20,40 @@
 
 /*
  |--------------------------------------------------------------------------
+ | Boot after everything has loaded
+ |--------------------------------------------------------------------------
+ |
+ | Here we are sure that everything we need is properly loaded and the
+ | Express server can now start booting
+ |
+ */
+
+var taddManagerInit = function(err, app, self) {
+
+    app.log.info("TaddManager : Booting...");
+
+    // Require the "class" file
+    var TaddManagerClass = require(__dirname + "/common/taddManagerClass.js");
+    // Instantiate the mongodb object
+    app.taddManager = new TaddManagerClass(exports.name);
+
+    app.taddManager.init(function(err, available){
+
+        if(err) {
+            throw err;
+        }
+
+        // Inject available tadds into the object
+        app.taddManager.available = available;
+
+        app.log.info("TaddManager : Successfully completed booting");
+
+        self.done();
+    });
+};
+
+/*
+ |--------------------------------------------------------------------------
  | Pre-class definitions
  |--------------------------------------------------------------------------
  |
@@ -34,10 +68,8 @@ exports.name = "taddManager";
 // When the module is being registered
 exports.onRegister = function(app) {
 
-    // Require the "class" file
-    var TaddManagerClass = require(__dirname + "/common/taddManagerClass.js");
-    // Instantiate the mongodb object
-    app.taddManager = new TaddManagerClass(exports.name);
+    // Wait for taddManager to load completely before starting anything!
+    app.waitFor(exports.name, "datastore", taddManagerInit);
 };
 
 
@@ -48,23 +80,6 @@ exports.onRegister = function(app) {
  */
 
 // Constructor
-var taddManagerBoot = function(app) {
-
-    var self = this;
-
-    app.log.info("TaddManager : Booting...");
-
-    app.taddManager.init(function(err){
-
-        if(err) {
-            throw err;
-        }
-
-        app.log.info("TaddManager : Successfully completed booting");
-
-        self.done();
-    });
-
-};
+var taddManagerBoot = function() {};
 
 module.exports.boot = taddManagerBoot;

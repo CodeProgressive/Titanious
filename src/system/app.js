@@ -83,18 +83,17 @@ appClass.prototype.register = function(module, parameters) {
     app.bootRegister[module.name] = {
         method : module.boot,
         parameters : parameters,
-        waitList : [],
+        waitList : {},
         done : false
     };
 
     // If there is a dependency waiting...
     if(typeof app.dependencyExpectations[module.name] !== 'undefined') {
 
-        // Make sure they go in the waiting list
-        app.dependencyExpectations[module.name].forEach(function(val){
-            app.bootRegister[module.name]["waitList"].push(val);
-        });
-
+        for(var wn in app.dependencyExpectations[module.name]) {
+            // Make sure they go in the waiting list
+            app.bootRegister[module.name]["waitList"][wn] = app.dependencyExpectations[module.name][wn];
+        }
         // Now that hey are in the proper place, remove them from the
         // dependency expectation list
         delete app.dependencyExpectations[module.name];
@@ -111,22 +110,23 @@ appClass.prototype.register = function(module, parameters) {
  |
  */
 
-appClass.prototype.waitFor = function(name, callback) {
+appClass.prototype.waitFor = function(name, dependency, callback) {
 
     // If the module is already registered, then that's great
-    if(typeof this.bootRegister[name] !== 'undefined') {
-        this.bootRegister[name]["waitList"].push(callback);
+    if(typeof this.bootRegister[dependency] !== 'undefined') {
+
+        this.bootRegister[dependency]["waitList"][name] = callback;
 
     // But if it's not, then wait for it to register first
     } else {
 
-        // Make sure to create an array if required
-        if(typeof this.dependencyExpectations[name] === 'undefined') {
-            this.dependencyExpectations[name] = [];
+        // Make sure to create an object if required
+        if(typeof this.dependencyExpectations[dependency] === 'undefined') {
+            this.dependencyExpectations[dependency] = {};
         }
 
-        // Then push it to the array so we can get it later
-        this.dependencyExpectations[name].push(callback);
+        // Then push it to the object so we can get it later
+        this.dependencyExpectations[dependency][name] = callback;
     }
 };
 
@@ -155,10 +155,12 @@ appClass.prototype.done = function(name) {
     app.bootRegister[name].done = true;
 
     // Make sure there are modules waiting, if not, just stop
-    if(app.bootRegister[name]["waitList"].length > 0) {
-        app.bootRegister[name]["waitList"].forEach(function(callback){
-            callback(null, app);
-        });
+    if(Object.keys(app.bootRegister[name]["waitList"]).length > 0) {
+        for(var wn in app.bootRegister[name]["waitList"]) {
+            // We need the third parameter to be the instantiated object, for we
+            // cannot be sure that it has access to it at the point of calling
+            app.bootRegister[name]["waitList"][wn](null, app, app[wn]);
+        }
     }
 };
 
