@@ -74,7 +74,7 @@ viewClass.prototype.setViewBag = function(acceptedLanguages, callback) {
             }
 
             // Now execute the callback
-            callback(null);
+            callback(null, self.viewBag);
         });
     });
 };

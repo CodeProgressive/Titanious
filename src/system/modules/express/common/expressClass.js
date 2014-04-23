@@ -178,15 +178,27 @@ expressClass.prototype.resetRoute = function(self) {
     return function(req,res,next) {
 
         self.view.setResponse(res);
-        // Make the viewBag
-        self.view.setViewBag(req.headers["accept-language"], function(err){
 
-            if(err) {
-                throw new Error(err);
-            }
+        // Make sure we are not dealing with a damn favicon
+        if(req.url != 'favicon.ico') {
+
+            // Make the viewBag
+            self.view.setViewBag(req.headers["accept-language"], function(err, viewBag){
+
+                if(err) {
+                    throw new Error(err);
+                }
+
+                // Set session variables for use inside templates
+                viewBag.set("session", req.session);
+
+                next();
+            });
+
+        } else {
 
             next();
-        });
+        }
     };
 };
 

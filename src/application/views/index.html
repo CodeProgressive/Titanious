@@ -2,12 +2,13 @@
 <html lang="en" class="app">
 <head>
     <meta charset="utf-8"/>
-    <title>TITANIOUS</title>
+    <title>{{ general_web_title }}</title>
     <meta name="description"
           content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <link rel="stylesheet" href="/css/app.v1.css" type="text/css"/>
     <link rel="stylesheet" href="/js/calendar/bootstrap_calendar.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/base.css" type="text/css"/>
     <!--[if lt IE 9]>
     <script src="/js/ie/html5shiv.js"></script>
     <script src="/js/ie/respond.min.js"></script>
@@ -19,7 +20,7 @@
     <div class="navbar-header aside-md dk"><a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen"
                                               data-target="#nav"> <i class="fa fa-bars"></i> </a> <a href="index.html"
                                                                                                      class="navbar-brand"><img
-            src="images/titanious_logo_only.svg" class="m-r-sm">TITANIOUS</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
+            src="/images/titanious_logo_only.svg" class="m-r-sm">TITANIOUS</a> <a class="btn btn-link visible-xs" data-toggle="dropdown"
                                                               data-target=".user"> <i class="fa fa-cog"></i> </a></div>
     <form class="navbar-form navbar-left input-s-lg m-t m-l-n-xs hidden-xs" role="search">
         <div class="form-group">
@@ -31,37 +32,14 @@
         </div>
     </form>
     <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user user">
-        <li class="hidden-xs"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <i class="i i-chat3"></i>
-            <span class="badge badge-sm up bg-danger count">2</span> </a>
-            <section class="dropdown-menu aside-xl animated flipInY">
-                <section class="panel bg-white">
-                    <header class="panel-heading b-light bg-light"><strong>You have <span class="count">2</span>
-                        notifications</strong></header>
-                    <div class="list-group list-group-alt"><a href="#" class="media list-group-item"> <span
-                            class="pull-left thumb-sm"> <img src="images/a0.jpg" alt="John said"
-                                                             class="img-circle"> </span> <span
-                            class="media-body block m-b-none"> Use awesome animate.css<br>
-              <small class="text-muted">10 minutes ago</small> </span> </a> <a href="#"
-                                                                               class="media list-group-item"> <span
-                            class="media-body block m-b-none"> 1.0 initial released<br>
-              <small class="text-muted">1 hour ago</small> </span> </a></div>
-                    <footer class="panel-footer text-sm"><a href="#" class="pull-right"><i class="fa fa-cog"></i></a> <a
-                            href="#notes" data-toggle="class:show animated fadeInRight">See all the notifications</a>
-                    </footer>
-                </section>
-            </section>
-        </li>
         <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span
-                class="thumb-sm avatar pull-left"> </span> {{ username }} <b class="caret"></b>
+                class="thumb-sm avatar pull-left"> </span> {{ session.user.username }} <b class="caret"></b>
         </a>
             <ul class="dropdown-menu animated fadeInRight">
                 <span class="arrow top"></span>
-                <li><a href="#">Settings</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="#"> <span class="badge bg-danger pull-right">3</span> Notifications </a></li>
-                <li><a href="docs.html">Help</a></li>
+                <li><a href="/settings/user/{{ session.user.details.uid.id }}">Settings</a></li>
                 <li class="divider"></li>
-                <li><a href="modal.lockme.html" data-toggle="ajaxModal">Logout</a></li>
+                <li><a href="/user/logout" data-toggle="ajaxModal">Logout</a></li>
             </ul>
         </li>
     </ul>
@@ -78,121 +56,27 @@
                 <nav class="nav-primary hidden-xs">
                     <div class="text-muted text-sm hidden-nav-xs padder m-t-sm m-b-sm">Start</div>
                     <ul class="nav nav-main" data-ride="collapse">
-                        <li class="active"><a href="index.html" class="auto"> <i class="i i-statistics icon"> </i> <span
-                                class="font-bold">Overview</span> </a></li>
-                        <li><a href="#" class="auto"> <span class="pull-right text-muted"> <i
-                                class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span> <b
-                                class="badge bg-danger pull-right">4</b> <i class="i i-stack icon"> </i> <span
-                                class="font-bold">Layouts</span> </a>
+                        <li class="active">
+                            <a href="/Dashboard" class="auto"> <i class="i i-statistics icon"> </i><span class="font-bold">Dashboard</span> </a>
+                        </li>
+                        <li><a href="#" class="auto"> <span class="pull-right text-muted">
+                            <i class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span><i class="i i-stack icon"> </i>
+                            <span class="font-bold">Settings</span> </a>
                             <ul class="nav dk">
-                                <li><a href="layout-color.html" class="auto"> <i class="i i-dot"></i>
-                                    <span>Color option</span> </a></li>
-                                <li><a href="layout-hbox.html" class="auto"> <i class="i i-dot"></i>
-                                    <span>Hbox layout</span> </a></li>
+                                <li><a href="/settings/general" class="auto"> <i class="i i-dot"></i>
+                                    <span>General configuration</span> </a></li>
+                                <li><a href="/settings/user" class="auto"> <i class="i i-dot"></i>
+                                    <span>User configuration</span> </a></li>
+                                <li><a href="/taddmanager" class="auto"> <i class="i i-dot"></i>
+                                    <span>Tadd Manager</span> </a></li>
                             </ul>
                         </li>
-                        <li><a href="#" class="auto"> <span class="pull-right text-muted"> <i
-                                class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span> <i
-                                class="i i-lab icon"> </i> <span class="font-bold">UI kit</span> </a>
-                            <ul class="nav dk">
-                                <li><a href="buttons.html" class="auto"> <i class="i i-dot"></i> <span>Buttons</span>
-                                </a></li>
-                                <li><a href="icons.html" class="auto"> <b class="badge bg-info pull-right">369</b> <i
-                                        class="i i-dot"></i> <span>Icons</span> </a></li>
-                                <li><a href="grid.html" class="auto"> <i class="i i-dot"></i> <span>Grid</span> </a>
-                                </li>
-                                <li><a href="widgets.html" class="auto"> <b class="badge bg-dark pull-right">8</b> <i
-                                        class="i i-dot"></i> <span>Widgets</span> </a></li>
-                                <li><a href="components.html" class="auto"> <i class="i i-dot"></i>
-                                    <span>Components</span> </a></li>
-                                <li><a href="list.html" class="auto"> <i class="i i-dot"></i> <span>List group</span>
-                                </a></li>
-                                <li><a href="#table" class="auto"> <span class="pull-right text-muted"> <i
-                                        class="i i-circle-sm-o text"></i> <i
-                                        class="i i-circle-sm text-active"></i> </span> <i class="i i-dot"></i> <span>Table</span>
-                                </a>
-                                    <ul class="nav dker">
-                                        <li><a href="table-static.html"> <i class="i i-dot"></i>
-                                            <span>Table static</span> </a></li>
-                                        <li><a href="table-datatable.html"> <i class="i i-dot"></i>
-                                            <span>Datatable</span> </a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#form" class="auto"> <span class="pull-right text-muted"> <i
-                                        class="i i-circle-sm-o text"></i> <i
-                                        class="i i-circle-sm text-active"></i> </span> <i class="i i-dot"></i> <span>Form</span>
-                                </a>
-                                    <ul class="nav dker">
-                                        <li><a href="form-elements.html"> <i class="i i-dot"></i>
-                                            <span>Form elements</span> </a></li>
-                                        <li><a href="form-validation.html"> <i class="i i-dot"></i> <span>Form validation</span>
-                                        </a></li>
-                                        <li><a href="form-wizard.html"> <i class="i i-dot"></i> <span>Form wizard</span>
-                                        </a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="chart.html" class="auto"> <i class="i i-dot"></i> <span>Chart</span> </a>
-                                </li>
-                                <li><a href="portlet.html" class="auto"> <i class="i i-dot"></i> <span>Portlet</span>
-                                </a></li>
-                                <li><a href="timeline.html" class="auto"> <i class="i i-dot"></i> <span>Timeline</span>
-                                </a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="auto"> <span class="pull-right text-muted"> <i
-                                class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span> <i
-                                class="i i-docs icon"> </i> <span class="font-bold">Pages</span> </a>
-                            <ul class="nav dk">
-                                <li><a href="profile.html" class="auto"> <i class="i i-dot"></i> <span>Profile</span>
-                                </a></li>
-                                <li><a href="invoice.html" class="auto"> <i class="i i-dot"></i> <span>Invoice</span>
-                                </a></li>
-                                <li><a href="intro.html" class="auto"> <i class="i i-dot"></i> <span>Intro</span> </a>
-                                </li>
-                                <li><a href="master.html" class="auto"> <i class="i i-dot"></i> <span>Master</span> </a>
-                                </li>
-                                <li><a href="gmap.html" class="auto"> <i class="i i-dot"></i> <span>Google Map</span>
-                                </a></li>
-                                <li><a href="jvectormap.html" class="auto"> <i class="i i-dot"></i>
-                                    <span>Vector Map</span> </a></li>
-                                <li><a href="signin.html" class="auto"> <i class="i i-dot"></i> <span>Signin</span> </a>
-                                </li>
-                                <li><a href="signup.html" class="auto"> <i class="i i-dot"></i> <span>Signup</span> </a>
-                                </li>
-                                <li><a href="404.html" class="auto"> <i class="i i-dot"></i> <span>404</span> </a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#" class="auto"> <span class="pull-right text-muted"> <i
-                                class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span> <i
-                                class="i i-grid2 icon"> </i> <span class="font-bold">Apps</span> </a>
-                            <ul class="nav dk">
-                                <li><a href="mail.html" class="auto"> <b class="badge bg-success lt pull-right">2</b> <i
-                                        class="i i-dot"></i> <span>Mailbox</span> </a></li>
-                                <li><a href="fullcalendar.html" class="auto"> <i class="i i-dot"></i>
-                                    <span>Calendar</span> </a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <div class="line dk hidden-nav-xs"></div>
-                    <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Lables</div>
-                    <ul class="nav">
-                        <li><a href="mail.html#work"> <i class="i i-circle-sm text-info-dk"></i> <span>Work space</span>
-                        </a></li>
-                        <li><a href="mail.html#social"> <i class="i i-circle-sm text-success-dk"></i>
-                            <span>Connection</span> </a></li>
-                        <li><a href="mail.html#projects"> <i class="i i-circle-sm text-danger-dk"></i>
-                            <span>Projects</span> </a></li>
-                    </ul>
-                    <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Circles</div>
-                    <ul class="nav">
-                        <li><a href="#"> <i class="i i-circle-sm-o text-success-lt"></i> <span>College</span> </a></li>
-                        <li><a href="#"> <i class="i i-circle-sm-o text-warning"></i> <span>Social</span> </a></li>
                     </ul>
                 </nav>
                 <!-- / nav -->
             </div>
         </section>
-        <footer class="footer hidden-xs no-padder text-center-nav-xs"><a href="modal.lockme.html"
+        <footer class="footer hidden-xs no-padder text-center-nav-xs"><a href="/user/logout"
                                                                          data-toggle="ajaxModal"
                                                                          class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
             <i class="i i-logout"></i> </a> <a href="#nav" data-toggle="class:nav-xs"
@@ -246,129 +130,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 dker">
-                    <section>
-                        <header class="font-bold padder-v">
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button data-toggle="dropdown"
-                                            class="btn btn-sm btn-rounded btn-default dropdown-toggle"><span
-                                            class="dropdown-label">Week</span> <span class="caret"></span></button>
-                                    <ul class="dropdown-menu dropdown-select">
-                                        <li><a href="#">
-                                            <input type="radio" name="b">
-                                            Month</a></li>
-                                        <li><a href="#">
-                                            <input type="radio" name="b">
-                                            Week</a></li>
-                                        <li><a href="#">
-                                            <input type="radio" name="b">
-                                            Day</a></li>
-                                    </ul>
-                                </div>
-                                <a href="#" class="btn btn-default btn-icon btn-rounded btn-sm">Go</a></div>
-                            Statistics
-                        </header>
-                        <div class="panel-body">
-                            <div id="flot-sp1ine" style="height:210px"></div>
-                        </div>
-                        <div class="row text-center no-gutter">
-                            <div class="col-xs-3"><span class="h4 font-bold m-t block">5,860</span>
-                                <small class="text-muted m-b block">Orders</small>
-                            </div>
-                            <div class="col-xs-3"><span class="h4 font-bold m-t block">10,450</span>
-                                <small class="text-muted m-b block">Sellings</small>
-                            </div>
-                            <div class="col-xs-3"><span class="h4 font-bold m-t block">21,230</span>
-                                <small class="text-muted m-b block">Items</small>
-                            </div>
-                            <div class="col-xs-3"><span class="h4 font-bold m-t block">7,230</span>
-                                <small class="text-muted m-b block">Customers</small>
-                            </div>
-                        </div>
-                    </section>
-                </div>
             </div>
         </section>
     </section>
 </section>
-<!-- side content -->
-<aside class="aside-md bg-black hide" id="sidebar">
-    <section class="vbox animated fadeInRight">
-        <section class="scrollable">
-            <div class="wrapper"><strong>Live feed</strong></div>
-            <ul class="list-group no-bg no-borders auto">
-                <li class="list-group-item"><span class="fa-stack pull-left m-r-sm"> <i
-                        class="fa fa-circle fa-stack-2x text-success"></i> <i
-                        class="fa fa-reply fa-stack-1x text-white"></i> </span> <span class="clear"> <a href="#">Goody@gmail.com</a> sent your email <small
-                        class="icon-muted">13 minutes ago
-                </small> </span></li>
-                <li class="list-group-item"><span class="fa-stack pull-left m-r-sm"> <i
-                        class="fa fa-circle fa-stack-2x text-danger"></i> <i
-                        class="fa fa-file-o fa-stack-1x text-white"></i> </span> <span class="clear"> <a href="#">Mide@live.com</a> invite you to join a meeting <small
-                        class="icon-muted">20 minutes ago
-                </small> </span></li>
-                <li class="list-group-item"><span class="fa-stack pull-left m-r-sm"> <i
-                        class="fa fa-circle fa-stack-2x text-info"></i> <i
-                        class="fa fa-map-marker fa-stack-1x text-white"></i> </span> <span class="clear"> <a href="#">Geoge@yahoo.com</a> is online <small
-                        class="icon-muted">1 hour ago
-                </small> </span></li>
-                <li class="list-group-item"><span class="fa-stack pull-left m-r-sm"> <i
-                        class="fa fa-circle fa-stack-2x text-primary"></i> <i
-                        class="fa fa-info fa-stack-1x text-white"></i> </span> <span class="clear"> <a href="#"><strong>Admin</strong></a> post a info <small
-                        class="icon-muted">1 day ago
-                </small> </span></li>
-            </ul>
-            <div class="wrapper"><strong>Friends</strong></div>
-            <ul class="list-group no-bg no-borders auto">
-                <li class="list-group-item">
-                    <div class="media"><span class="pull-left thumb-sm avatar"> <img src="images/a3.jpg" alt="John said"
-                                                                                     class="img-circle"> <i
-                            class="on b-black bottom"></i> </span>
-
-                        <div class="media-body">
-                            <div><a href="#">Chris Fox</a></div>
-                            <small class="text-muted">about 2 minutes ago</small>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="media"><span class="pull-left thumb-sm avatar"> <img src="images/a2.jpg"
-                                                                                     alt="John said"> <i
-                            class="on b-black bottom"></i> </span>
-
-                        <div class="media-body">
-                            <div><a href="#">Amanda Conlan</a></div>
-                            <small class="text-muted">about 2 hours ago</small>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="media"><span class="pull-left thumb-sm avatar"> <img src="images/a1.jpg"
-                                                                                     alt="John said"> <i
-                            class="busy b-black bottom"></i> </span>
-
-                        <div class="media-body">
-                            <div><a href="#">Dan Doorack</a></div>
-                            <small class="text-muted">3 days ago</small>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="media"><span class="pull-left thumb-sm avatar"> <img src="images/a0.jpg"
-                                                                                     alt="John said"> <i
-                            class="away b-black bottom"></i> </span>
-
-                        <div class="media-body">
-                            <div><a href="#">Lauren Taylor</a></div>
-                            <small class="text-muted">about 2 minutes ago</small>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-    </section>
-</aside>
 <!-- / side content -->
 </section>
 <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a></section>

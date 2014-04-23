@@ -68,18 +68,37 @@ userController.prototype.login = function(body, req, res) {
                     return self.view.make("signin.html", o);
                 }
 
-                // Set the session
-                req.session.user = {
-                    details: result
-                };
+                req.session.regenerate(function(err){
 
-                return res.redirect("/dashboard");
+                    if(err) {
+                        throw new Error(err);
+                    }
+
+                    // Set the session
+                    req.session.user = {
+                        username: body.username,
+                        details: result
+                    };
+
+                    // Check the history
+                    if(req.session.history) {
+                        return res.redirect(req.session.history);
+                    }
+                    return res.redirect("/dashboard");
+                });
             });
         }
     }
 
     // Make the login view
     return self.view.make("signin.html", o);
+};
+
+userController.prototype.logout = function(req, res) {
+
+    req.session.destroy(function(err){
+        return res.redirect("/dashboard");
+    });
 };
 
 // Export the module!

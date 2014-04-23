@@ -43,5 +43,17 @@ module.exports = {
                 return controller.call("user@login", [req.body, req, res]);
             }
         };
+    },
+
+
+    "/logout" : function(model, view, controller) {
+
+        return {
+
+            all : function(req, res) {
+
+                return controller.call("user@logout", [req, res]);
+            }
+        }
     }
 };

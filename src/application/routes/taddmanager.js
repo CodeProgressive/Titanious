@@ -7,7 +7,7 @@
  *     |_| |___| |_/_/   \_|_| \_|___\___/ \___/|____/
  *
  *
- * LOCALE FILE (GENERAL) general
+ * ROUTE FILE - settings route
  *
  * @author Jimmy Aupperlee <jimmy@codeprogressive.com>
  * @copyright codeProgressive
@@ -17,7 +17,13 @@
 
 module.exports = {
 
-    "general_web_title" : "TITANIOUS",
-    "general_web_affix" : "|"
+    "/" : function(model, view, controller) {
 
+        return {
+            all : function() {
+
+                return controller.call("taddmanager");
+            }
+        };
+    }
 };
