@@ -154,7 +154,7 @@ appClass.prototype.done = function(name) {
     // Set the module to done!
     app.bootRegister[name].done = true;
 
-    // Make sure there are modules waiting, if not, just stop
+    // Test to see if there are modules waiting, if not, just stop
     if(Object.keys(app.bootRegister[name]["waitList"]).length > 0) {
         for(var wn in app.bootRegister[name]["waitList"]) {
             // We need the third parameter to be the instantiated object, for we

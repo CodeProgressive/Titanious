@@ -15,6 +15,11 @@ form .list-group .list-group-item.error {
 
 /* BASIC RESETS */
 
+button {
+    outline: none !important;
+    -webkit-appearance: none !important;
+}
+
 /* No blue chrome outline */
 button:focus {
     outline: none;

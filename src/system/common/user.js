@@ -29,7 +29,7 @@ var osClass = require("./os.js"),
 var userClass = function() {
 
     var os = new osClass(),
-        userClass = require(paths.__common + os.info.platform + paths.ds + "user.js");
+        userClass = require(paths.__common + os.info.platform.name + paths.ds + "user.js");
 
     this.user = new userClass();
 };

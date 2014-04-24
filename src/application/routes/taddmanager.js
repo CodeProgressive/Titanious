@@ -25,5 +25,15 @@ module.exports = {
                 return controller.call("taddmanager");
             }
         };
+    },
+
+    "/install/:name" : function(model, view, controller) {
+
+        return {
+            all : function(req, res) {
+
+                return controller.call("taddmanager@install", [req, res]);
+            }
+        };
     }
 };

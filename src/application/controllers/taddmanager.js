@@ -27,13 +27,93 @@ var taddmanagerController = function(model, view) {
     this.view = view;
 };
 
+taddmanagerController.prototype.addButtons = function(av) {
+
+    // Influence the taddManager object by adding buttons
+    if(typeof av[0] !== 'undefined' &&
+        typeof av[0].actions === 'undefined') {
+
+        for(var tadd in av) {
+
+            switch(av[tadd].status.code) {
+
+                case 0:
+                    av[tadd].actions = [
+                        {
+                            action : "install",
+                            class : "btn-success",
+                            name : "Install",
+                            icon : "i-arrow-up"
+                        }
+                    ];
+                    break;
+                case 1:
+                    av[tadd].actions = [
+                        {
+                            action : "config",
+                            class : "btn-primary",
+                            name : "Configure",
+                            icon : "i-settings"
+                        },
+                        {
+                            action : "remove",
+                            class : "btn-danger",
+                            name : "Remove",
+                            icon : "i-cross2"
+                        }
+                    ];
+                    break;
+                case 2:
+                    av[tadd].actions = [
+                        {
+                            action : "remove",
+                            class : "btn-danger",
+                            name : "Remove",
+                            icon : "i-cross2"
+                        }
+                    ];
+                    break;
+                default:
+
+                    break;
+            }
+        }
+    }
+};
+
 taddmanagerController.prototype.index = function() {
+
+    // Create a more convenient name
+    var av = this.app.taddManager.available;
+
+    // Add the buttons
+    this.addButtons(av);
 
     // Make the dashboard view
     return this.view.make("tm_index.html", {
         tad : {
-            available : this.app.taddManager.available
+            available : av
         }
+    });
+};
+
+taddmanagerController.prototype.install = function(req, res) {
+
+    // INSTALL
+    this.app.taddManager.install(req.params.name, function(err, config){
+
+        if(err) {
+            // TODO: Something with err?
+        }
+
+
+        // Is configuration required / necessary?
+        if(config) {
+            // TODO : We need the config screen here!
+        }
+
+        // Else just instal it an show the tadd manager
+        return res.redirect("/taddmanager");
     });
 };
 

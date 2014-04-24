@@ -17,7 +17,7 @@
 
 'use strict';
 
-var os = require('os-utils');
+var os = require('os');
 
 /*
  |--------------------------------------------------------------------------
@@ -41,11 +41,16 @@ var osClass = function() {
 
 osClass.prototype.getInfo = function() {
 
-    var freeMem = os.freememPercentage().toString(),
-        processUptime = os.processUptime().toString();
+    var freeMem = os.freemem().toString(),
+        processUptime = process.uptime().toString();
 
     var ro = {
-        platform : os.platform(),
+        platform : {
+            name : os.platform(),
+            release : os.release()
+        },
+        hostname : os.hostname(),
+        architecture : os.arch(),
         process : {
             uptime: {
                 short : processUptime.substr(0, processUptime.length - 13),
@@ -55,7 +60,7 @@ osClass.prototype.getInfo = function() {
         memory : {
             total : os.totalmem(),
             free : {
-                amount : os.freemem(),
+                amount : freeMem,
                 percentage : {
                     short : freeMem.substr(0, freeMem.indexOf(".") + 3),
                     long : freeMem
@@ -65,11 +70,10 @@ osClass.prototype.getInfo = function() {
         harddrive : {
 
         },
-        cpu : {
-            total : os.cpuCount()
-        },
+        cpus : os.cpus(),
+        network : os.networkInterfaces(),
         system : {
-            uptime : os.sysUptime()
+            uptime : os.release()
         }
     };
 

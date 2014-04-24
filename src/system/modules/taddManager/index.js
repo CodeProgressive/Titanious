@@ -35,7 +35,7 @@ var taddManagerInit = function(err, app, self) {
     // Require the "class" file
     var TaddManagerClass = require(__dirname + "/common/taddManagerClass.js");
     // Instantiate the mongodb object
-    app.taddManager = new TaddManagerClass(exports.name);
+    app.taddManager = new TaddManagerClass(exports.name, app);
 
     app.taddManager.init(function(err, available){
 

@@ -27,6 +27,7 @@
 var paths               = require('../../../includes/paths.js'),
     moduleSearchClass   = require(__dirname + paths.ds + "moduleSearchClass.js"),
     taddValidateClass   = require(__dirname + paths.ds + "taddValidateClass.js"),
+    taddDatastoreClass  = require(__dirname + paths.ds + "taddDatastoreClass.js"),
     OptionsClass        = require(paths.__common + "options.js");
 
 /*
@@ -55,7 +56,7 @@ var default_options = {
  | the same name as the module
  |
  */
-var taddManagerClass = function(name) {
+var taddManagerClass = function(name, app) {
 
     // Merge the default options with the options set in the config file
     this.options = new OptionsClass(name).merge(default_options);
@@ -64,6 +65,8 @@ var taddManagerClass = function(name) {
     this.moduleSearch = new moduleSearchClass();
     // Instantiate the tadd validation
     this.taddValidate = new taddValidateClass();
+    // Instantiate the tadd datastore
+    this.taddDatastore = new taddDatastoreClass(app);
 };
 
 /*
@@ -83,8 +86,25 @@ taddManagerClass.prototype.init = function(callback) {
 
         var validated = self.taddValidate.getValidTadds(directories);
 
-        callback(null, validated);
+        self.taddDatastore.getStatus(validated, function(err, tadds){
+
+            if(err) {
+                return callback(err);
+            }
+
+            callback(null, tadds);
+        });
     });
+};
+
+/*
+ |--------------------------------------------------------------------------
+ | The installation of Tadds
+ |--------------------------------------------------------------------------
+ */
+taddManagerClass.prototype.install = function(name, callback) {
+
+    callback(null);
 };
 
 /*

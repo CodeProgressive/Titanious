@@ -45,6 +45,10 @@ var default_options = {
         {
             name : "general",
             filename :  paths.__datastore + "general.db"
+        },
+        {
+            name : "tadd",
+            filename :  paths.__datastore + "tadd.db"
         }
     ]
 };

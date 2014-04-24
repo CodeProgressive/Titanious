@@ -28,7 +28,6 @@
     "daemon": "~1.1.0",
     "locale": "*",
     "npm": "~1.4.7",
-    "os-utils": "*",
     "require-all": "~0.0.8",
     "ssh2": "*",
     "nedb": "~0.10.5"

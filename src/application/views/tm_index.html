@@ -83,7 +83,7 @@
                 <button class="btn btn-sm btn-default">Apply</button>
             </div>
             <div class="col-sm-6 m-b-xs">
-                <button type="button" class="hover btn btn-info pull-right"><i class="i i-rotate i-sm text-white hover-rotate"></i> Refresh</button>
+                <button type="button" class="hover btn btn-info pull-right"><i class="i i-loop i-sm text-white hover-rotate"></i> Refresh</button>
             </div>
         </div>
         <div class="table-responsive">
@@ -101,10 +101,10 @@
                 <tr>
                     <td><label class="checkbox m-n i-checks"><input type="checkbox" name="tadd[]" value="{{ tad.name }}"><i></i></label></td>
                     <td><strong>{{ tad.name }}</strong></td>
-                    <td>{{ tad.status }}</td>
+                    <td>{{ tad.status.text }}</td>
                     <td>
                         {% for button in tad.actions %}
-                        <button type="button" data-action="{{ button.action }}" class="hover btn btn-info"><i class="i {{ button.icon }} i-sm text-white hover-rotate"></i> {{ button.name }}</button>
+                        <a href="/taddmanager/install/{{ tad.name }}" type="button" data-action="{{ button.action }}" class="{{ button.class }} btn btn-info"><i class="i {{ button.icon }} i-sm text-white"></i> {{ button.name }}</button>
                         {% endfor %}
                     </td>
                 </tr>
