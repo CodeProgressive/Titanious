@@ -66,7 +66,7 @@ module.exports = (function(){
         var errList = [],
             list = [];
 
-        session_list[sessid].connection.exec('id', function(err, stream) {
+        session_list[sessid].connection.exec(command, function(err, stream) {
 
             if(err) {
                 callback(err);
@@ -110,8 +110,6 @@ module.exports = (function(){
             stream.on('exit', function() {
 
                 // TODO : Throw something for code and signal parameters
-
-                session_list[sessid].connection.end();
             });
         });
     };

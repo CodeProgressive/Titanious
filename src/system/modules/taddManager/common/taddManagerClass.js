@@ -25,9 +25,14 @@
  */
 
 var paths               = require('../../../includes/paths.js'),
-    moduleSearchClass   = require(__dirname + paths.ds + "moduleSearchClass.js"),
+
+    taddClass           = require(__dirname + paths.ds + "taddClass.js"),
     taddValidateClass   = require(__dirname + paths.ds + "taddValidateClass.js"),
     taddDatastoreClass  = require(__dirname + paths.ds + "taddDatastoreClass.js"),
+
+    moduleSearchClass   = require("../lib/moduleSearchClass.js"),
+    taddQueueClass      = require("../lib/taddQueueClass.js"),
+
     OptionsClass        = require(paths.__common + "options.js");
 
 /*
@@ -67,6 +72,8 @@ var taddManagerClass = function(name, app) {
     this.taddValidate = new taddValidateClass();
     // Instantiate the tadd datastore
     this.taddDatastore = new taddDatastoreClass(app);
+    // Instantiate the tadd datastore
+    this.taddQueue = new taddQueueClass(this.taddDatastore);
 };
 
 /*
@@ -92,7 +99,26 @@ taddManagerClass.prototype.init = function(callback) {
                 return callback(err);
             }
 
-            callback(null, tadds);
+            try {
+
+                // Initialize the taddclass with everything about the tadd in it
+                for(var tadd in tadds) {
+
+                    // Require the index file of the tadd
+                    var index = require(tadds[tadd].path);
+                    // Then initialize it, as expected...
+                    tadds[tadd].index = new taddClass(index, tadds[tadd], self.taddQueue);
+                }
+
+            } catch(e) {
+
+                console.log("Something went wrong when initializing a tadd. Please correct: " + e);
+            }
+
+            // Inject available tadds into the object
+            self.available = tadds;
+
+            callback(null);
         });
     });
 };
@@ -102,9 +128,11 @@ taddManagerClass.prototype.init = function(callback) {
  | The installation of Tadds
  |--------------------------------------------------------------------------
  */
-taddManagerClass.prototype.install = function(name, callback) {
+taddManagerClass.prototype.install = function(name, sessid, callback) {
 
-    callback(null);
+    // Install the tadd selected
+    // We need the session id for authentication later on!!!
+    this.available[name].index.install(sessid, callback);
 };
 
 /*

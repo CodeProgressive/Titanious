@@ -20,7 +20,7 @@ module.exports = [
     function(req, res, next) {
 
         // Make sure we are logged in, otherwise no access to anything!
-        if(req.url !== "/user/login" && req.url !== "favicon.ico" && !req.session.user) {
+        if(req.url !== "/user/login" && req.url !== "/favicon.ico" && !req.session.user) {
             // Set history
             req.session.history = req.url;
             // Redirect to the login

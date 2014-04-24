@@ -26,7 +26,6 @@
         </ul>
     </li>
 </ul>
-
 {% endblock %}
 
 {% block content %}
@@ -104,7 +103,7 @@
                     <td>{{ tad.status.text }}</td>
                     <td>
                         {% for button in tad.actions %}
-                        <a href="/taddmanager/install/{{ tad.name }}" type="button" data-action="{{ button.action }}" class="{{ button.class }} btn btn-info"><i class="i {{ button.icon }} i-sm text-white"></i> {{ button.name }}</button>
+                        <a href="/taddmanager/install/{{ tad.mname }}" type="button" data-action="{{ button.action }}" class="{{ button.class }} btn btn-info"><i class="i {{ button.icon }} i-sm text-white"></i> {{ button.name }}</button>
                         {% endfor %}
                     </td>
                 </tr>

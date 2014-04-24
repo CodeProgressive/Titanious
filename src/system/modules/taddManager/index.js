@@ -37,14 +37,11 @@ var taddManagerInit = function(err, app, self) {
     // Instantiate the mongodb object
     app.taddManager = new TaddManagerClass(exports.name, app);
 
-    app.taddManager.init(function(err, available){
+    app.taddManager.init(function(err){
 
         if(err) {
             throw err;
         }
-
-        // Inject available tadds into the object
-        app.taddManager.available = available;
 
         app.log.info("TaddManager : Successfully completed booting");
 
@@ -69,7 +66,7 @@ exports.name = "taddManager";
 exports.onRegister = function(app) {
 
     // Wait for taddManager to load completely before starting anything!
-    app.waitFor(exports.name, "datastore", taddManagerInit);
+    app.waitFor(exports.name, "express", taddManagerInit);
 };
 
 

@@ -29,9 +29,12 @@ var taddmanagerController = function(model, view) {
 
 taddmanagerController.prototype.addButtons = function(av) {
 
+    // Get the first in the object
+    for (var first in av) {  break; }
+
     // Influence the taddManager object by adding buttons
-    if(typeof av[0] !== 'undefined' &&
-        typeof av[0].actions === 'undefined') {
+    if(typeof av[first] !== 'undefined' &&
+        typeof av[first].actions === 'undefined') {
 
         for(var tadd in av) {
 
@@ -100,17 +103,13 @@ taddmanagerController.prototype.index = function() {
 taddmanagerController.prototype.install = function(req, res) {
 
     // INSTALL
-    this.app.taddManager.install(req.params.name, function(err, config){
+    this.app.taddManager.install(req.params.name, req.sessionID, function(err, result){
 
         if(err) {
-            // TODO: Something with err?
+            throw new Error(err);
         }
 
-
-        // Is configuration required / necessary?
-        if(config) {
-            // TODO : We need the config screen here!
-        }
+        console.log(result);
 
         // Else just instal it an show the tadd manager
         return res.redirect("/taddmanager");

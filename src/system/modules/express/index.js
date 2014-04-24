@@ -57,7 +57,7 @@ exports.name = "express";
 // When the module is being registered
 exports.onRegister = function(app) {
     // Wait for taddManager to load completely before starting anything!
-    app.waitFor(exports.name, "taddManager", expressInit);
+    app.waitFor(exports.name, "datastore", expressInit);
 };
 
 /*

@@ -76,7 +76,7 @@
                                     </li>
                                     <li>
                                         <a href="#" class="auto"> <span class="pull-right text-muted">
-                                <i class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span><i class="i i-stack icon"> </i>
+                                        <i class="i i-circle-sm-o text"></i> <i class="i i-circle-sm text-active"></i> </span><i class="i i-stack icon"> </i>
                                             <span class="font-bold">Settings</span>
                                         </a>
                                         <ul class="nav dk">
@@ -95,6 +95,13 @@
                                 {% endblock %}
                             </nav>
                             <!-- / nav -->
+                            {% if tad.installed %}
+                            <div class="line dk hidden-nav-xs"></div>
+                            <div class="text-muted text-xs hidden-nav-xs padder m-t-sm m-b-sm">Tadds</div>
+
+                            {{ tad.menu.content }}
+
+                            {% endif %}
                         </div>
                     </section>
                     <footer class="footer hidden-xs no-padder text-center-nav-xs">

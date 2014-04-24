@@ -68,24 +68,21 @@ userController.prototype.login = function(body, req, res) {
                     return self.view.make("signin.html", o);
                 }
 
-                req.session.regenerate(function(err){
+                if(err) {
+                    throw new Error(err);
+                }
 
-                    if(err) {
-                        throw new Error(err);
-                    }
+                // Set the session
+                req.session.user = {
+                    username: body.username,
+                    details: result
+                };
 
-                    // Set the session
-                    req.session.user = {
-                        username: body.username,
-                        details: result
-                    };
-
-                    // Check the history
-                    if(req.session.history) {
-                        return res.redirect(req.session.history);
-                    }
-                    return res.redirect("/dashboard");
-                });
+                // Check the history
+                if(req.session.history) {
+                    return res.redirect(req.session.history);
+                }
+                return res.redirect("/dashboard");
             });
         }
     }

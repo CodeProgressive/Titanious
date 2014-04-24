@@ -52,21 +52,24 @@ taddValidateClass.prototype.getValidTadds = function(taddLocationArray) {
         return false;
     }
 
-    var validTaddArray = [];
+    var validTaddObject = {};
 
     taddLocationArray.forEach(function(dir) {
 
         if(fs.existsSync(dir + paths.ds + "tadd.json")) {
 
             try {
-                
+
                 var json = fs.readFileSync(dir + paths.ds + "tadd.json");
                 json = JSON.parse(json);
 
-                validTaddArray.push({
-                    name : json.name || dir.substr(dir.lastIndexOf("/") + 1),
+                var mname = dir.substr(dir.lastIndexOf("/") + 1);
+
+                validTaddObject[mname] = {
+                    name : json.name || mname,
+                    mname : mname,
                     path : dir
-                });
+                };
 
             } catch(e) {
                 // TODO : Nice tidy up needed here
@@ -75,7 +78,7 @@ taddValidateClass.prototype.getValidTadds = function(taddLocationArray) {
         }
     });
 
-    return validTaddArray;
+    return validTaddObject;
 };
 
 // Export the module!
