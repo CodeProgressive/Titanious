@@ -1,5 +1,6 @@
 [![codeProgressive logo](http://codeprogressive.com/application/assets/images/logo_inverse.svg)](http://codeprogressive.com)
-# TITANIOUS [![Build Status](https://secure.travis-ci.org/CodeProgressive/Titanious.png?branch=master)](http://travis-ci.org/CodeProgressive/Titanious)
+# TITANIOUS 
+[![Build Status](https://secure.travis-ci.org/CodeProgressive/Titanious.png?branch=master)](http://travis-ci.org/CodeProgressive/Titanious)[![Coverage Status](https://coveralls.io/repos/CodeProgressive/Titanious/badge.png)](https://coveralls.io/r/CodeProgressive/Titanious)
 
 The open source webserver software management tool. More information can be found here: [http://titanio.us](http://titanio.us).
 
